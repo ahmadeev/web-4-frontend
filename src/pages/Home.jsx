@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar.jsx";
 import styles from "../page-styles/Home.module.css";
 import {useEffect} from "react";
+import DataTable from "../components/DataTable.jsx";
 
 function Home({ pageTitle }) {
 
@@ -37,6 +38,8 @@ function Home({ pageTitle }) {
                     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
                     culpa qui officia deserunt mollit anim id est laborum.</p>
 
+
+                <DataTable />
             </div>
 
         </>
