@@ -1,0 +1,29 @@
+.navbar {
+    top: 0;
+    left: 0;
+    position: fixed;
+
+    background-color: #fff;
+    height: 10vh;
+    width: 100%;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+a {
+    color: #676b5d;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+a:visited {
+    color: #676b5d;
+}
+
+a.active {
+    text-decoration: underline;
+}
