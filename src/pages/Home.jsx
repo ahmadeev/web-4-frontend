@@ -1,9 +1,12 @@
 import Navbar from "../components/Navbar.jsx";
 import styles from "../page-styles/Home.module.css";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import DataTable from "../components/DataTable.jsx";
+import Modal from "../components/Modal.jsx";
 
 function Home({ pageTitle }) {
+
+    const [modalActive, setModalActive] = useState(false);
 
     useEffect(() => {
         document.title = pageTitle;
@@ -38,10 +41,12 @@ function Home({ pageTitle }) {
                     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
                     culpa qui officia deserunt mollit anim id est laborum.</p>
 
-
+                <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
                 <DataTable />
             </div>
-
+            <Modal active={modalActive} setActive={setModalActive}>
+                <DataTable/>
+            </Modal>
         </>
     )
 }
