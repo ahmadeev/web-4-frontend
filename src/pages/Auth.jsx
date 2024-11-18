@@ -3,8 +3,7 @@ import {useEffect, useState} from "react";
 import SignInForm from "../components/SignInForm.jsx";
 import SignUpForm from "../components/SignUpForm.jsx";
 import styles from "../page-styles/CountDownToVikasBirthday.module.css";
-import {useLocation, useNavigate} from "react-router-dom";
-import {useAuth} from "../components/AuthProvider.jsx";
+import {useLocation} from "react-router-dom";
 
 function Auth({ pageTitle, isSignedUp }) {
     const [isSignedUpHook, setIsSignedUpHook] = useState(isSignedUp);
@@ -20,10 +19,9 @@ function Auth({ pageTitle, isSignedUp }) {
     return (
         <div className={styles.wrapper}>
             <Navbar/>
-            {isSignedUpHook ? (<SignInForm from={from} />) : (<SignUpForm from={from} />)}
-            <a onClick={() => {
-                setIsSignedUpHook(!isSignedUpHook);
-            }}>{isSignedUpHook ? "Sign In" : "Sign Up"}</a>
+            {isSignedUpHook ?
+                (<SignInForm from={from} isSignedUp={isSignedUpHook} setIsSignedUp={setIsSignedUpHook} />) :
+                (<SignUpForm from={from} isSignedUp={isSignedUpHook} setIsSignedUp={setIsSignedUpHook} />)}
         </div>
     )
 }

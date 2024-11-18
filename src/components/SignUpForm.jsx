@@ -1,12 +1,12 @@
 import {useAuth} from "./AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 
-function SignUpForm({ from }) {
+function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
     const { login } = useAuth();
     const navigate = useNavigate();
 
     return (
-        <>
+        <div>
             <form>
                 <label>
                     Введите имя пользователя или электронную почту:<br/>
@@ -24,10 +24,15 @@ function SignUpForm({ from }) {
                     event.preventDefault();
                     login();
                     console.log("адрес перед navigate", from)
-                    navigate(from, { replace: true });
-                }}>Sign Up</button>
+                    navigate(from, {replace: true});
+                }}>Sign Up
+                </button>
             </form>
-        </>
+            <br/>
+            <a onClick={() => {
+                setIsSignedUp(!isSignedUp);
+            }}>{isSignedUp ? "Sign In" : "Sign Up"}</a>
+        </div>
     )
 }
 

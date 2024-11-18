@@ -14,16 +14,16 @@
     align-items: center;
 }
 
-a {
+nav.navbar a {
     color: #676b5d;
     text-decoration: none;
     text-transform: uppercase;
 }
 
-a:visited {
+nav.navbar a:visited {
     color: #676b5d;
 }
 
-a.active {
+nav.navbar a.active {
     text-decoration: underline;
 }
