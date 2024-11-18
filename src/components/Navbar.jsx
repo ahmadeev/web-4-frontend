@@ -4,11 +4,19 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "./AuthProvider.jsx";
 
 function Navbar() {
-    const { logout } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.pathname || "/"
-    console.log("извне: ", from)
+    console.log("извне: ", from);
+
+    const div_style = {
+        height: "100%",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: "10px"
+    }
 
     return (
         <>
@@ -16,11 +24,33 @@ function Navbar() {
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/">home</NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/ny">новый год</NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/vbd">др вики</NavLink>
-                <button onClick={() => {
-                    console.log(from)
-                    logout();
-                    navigate(from);
-                }}>Log Out</button>
+
+
+                <div style={div_style}>
+                    {
+                        !isAuthenticated &&
+                        <button onClick={() => navigate("/auth")}>
+                            Log In
+                        </button>
+                    }
+
+                    {
+                        isAuthenticated &&
+                        <>
+                            <h3>Твоё Имя</h3>
+                            <button onClick={() => {
+                                console.log(from)
+                                logout();
+                                navigate(from);
+                            }}>
+                                Log Out
+                            </button>
+                        </>
+                    }
+                </div>
+
+
+
             </nav>
         </>
     )

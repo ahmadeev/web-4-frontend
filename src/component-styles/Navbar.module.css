@@ -27,3 +27,7 @@ nav.navbar a:visited {
 nav.navbar a.active {
     text-decoration: underline;
 }
+
+nav.navbar button {
+    height: 50%
+}
