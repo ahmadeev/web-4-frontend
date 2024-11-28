@@ -3,7 +3,8 @@ import styles from "../page-styles/Home.module.css";
 import {useEffect, useState} from "react";
 import DataTable from "../components/DataTable.jsx";
 import Modal from "../components/Modal.jsx";
-import {DragonDTO, DragonCaveDTO, CoordinatesDTO, DragonHeadDTO, PersonDTO, LocationDTO } from "../utils/model.js"
+import {DragonDTO, DragonCaveDTO, CoordinatesDTO, DragonHeadDTO, PersonDTO, LocationDTO} from "../utils/object.model.js"
+import {crudCreate, crudRead, crudUpdate, crudDelete} from "../utils/crud.js";
 
 function Home({ pageTitle }) {
 
@@ -15,58 +16,6 @@ function Home({ pageTitle }) {
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
     const id = 2;
-
-    function crudCreate(url, object) {
-        fetch(`${url}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(object),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Created item:', data))
-            .catch(error => console.error('Error:', error));
-    }
-
-    function crudRead(url, id) {
-        fetch(`${url}/${id}`, {
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(data => console.log('Item data:', data))
-            .catch(error => console.error('Error:', error));
-    }
-
-    function crudUpdate(url, id) {
-        fetch(`${url}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: 'Updated Item',
-                description: 'Updated description of the item',
-            }),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Updated item:', data))
-            .catch(error => console.error('Error:', error));
-    }
-
-    function crudDelete(url, id) {
-        fetch(`${url}/${id}`, {
-            method: 'DELETE',
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Item deleted');
-                } else {
-                    console.log('Failed to delete item');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
 
     // Пример создания экземпляра
     const coordinates = new CoordinatesDTO(50, 30);
