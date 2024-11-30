@@ -67,15 +67,16 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
                     }
                     setIsCorrect(true)
 
-                    let positiveOutcome = signUp(
+                    signUp(
                         document.getElementById("login-input").value,
                         document.getElementById("password-input-1").value
-                    );
-
-                    if (positiveOutcome) {
-                        console.log("адрес перед navigate", from)
-                        navigate(from, {replace: true});
-                    }
+                    )
+                        .then(isSignedUp => {
+                            if (isSignedUp) {
+                                console.log("адрес перед navigate", from)
+                                navigate(from, {replace: true});
+                            }
+                        })
                 }}>Sign Up
                 </button>
             </form>

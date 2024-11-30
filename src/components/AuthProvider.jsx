@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
         // было так:
         // crudCreate(`${BASE_URL}/sign-in`, new UserDTO(name, password));
-        fetch(`${BASE_URL}/sign-in`, {
+        return fetch(`${BASE_URL}/sign-in`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,12 +38,12 @@ export const AuthProvider = ({ children }) => {
                 sessionStorage.setItem("isAuthenticated", "true");
                 sessionStorage.setItem("sessionToken", responseData.data.token)
                 console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+                return true;
             })
             .catch(error => {
                 console.error('Error:', error)
                 return false;
             });
-        return true;
     };
 
     // Метод для входа в систему
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
         console.log("Sign up...");
 
         // crudCreate(`${BASE_URL}/sign-up`, new UserDTO(name, password));
-        fetch(`${BASE_URL}/sign-up`, {
+        return fetch(`${BASE_URL}/sign-up`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -71,12 +71,12 @@ export const AuthProvider = ({ children }) => {
                 sessionStorage.setItem("isAuthenticated", "true");
                 sessionStorage.setItem("sessionToken", responseData.data.token)
                 console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+                return true;
             })
             .catch(error => {
                 console.error('Error:', error)
                 return false;
             });
-        return true;
     };
 
     // Метод для выхода из системы
