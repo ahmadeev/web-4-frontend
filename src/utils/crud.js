@@ -2,7 +2,7 @@ export function crudCreate(url, object) {
     fetch(`${url}`, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(object),
@@ -16,7 +16,7 @@ export function crudRead(url, id) {
     fetch(`${url}/${id}`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
         },
     })
         .then(response => response.json())
@@ -29,7 +29,7 @@ export function crudUpdate(url, id) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
         },
         body: JSON.stringify({
             name: 'Updated Item',
@@ -45,7 +45,7 @@ export function crudDelete(url, id) {
     fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
         },
     })
         .then(response => {

@@ -18,12 +18,12 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
                 </label><br/>
                 <button onClick={() => {
                     event.preventDefault();
-                    let isSignedIn = signIn(
+                    let positiveOutcome = signIn(
                         document.getElementById("login-input").value,
                         document.getElementById("password-input").value
                     );
 
-                    if (isSignedIn) {
+                    if (positiveOutcome) {
                         console.log("адрес перед navigate", from)
                         navigate(from, {replace: true});
                     }
@@ -34,7 +34,7 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
             <br/>
             <a onClick={() => {
                 setIsSignedUp(!isSignedUp);
-            }}>{isSignedUp ? "Sign In" : "Sign Up"}</a>
+            }}>{isSignedUp ? "Sign Up" : "Sign In"}</a>
         </div>
     )
 }

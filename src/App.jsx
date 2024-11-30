@@ -18,7 +18,7 @@ function App() {
               <HashRouter>
                   <Routes>
                       <Route path="/" element={<Home pageTitle="Домашняя" />} />
-                      <Route path="/auth" element={<Auth pageTitle="Войти" isSignedUp={false} />} />
+                      <Route path="/auth" element={<Auth pageTitle="Войти" isSignedUp={true} />} />
                       <Route path="/ny" element={<CountDownToNewYear pageTitle="Счётчик дней до Нового года" />} />
                       <Route path="/vbd" element={
                           <ProtectedRoute isAuthenticated={isAuthenticated} >

@@ -19,9 +19,11 @@ function Auth({ pageTitle, isSignedUp }) {
     return (
         <div className={styles.wrapper}>
             <Navbar/>
-            {isSignedUpHook ?
+            {
+                isSignedUpHook ?
                 (<SignInForm from={from} isSignedUp={isSignedUpHook} setIsSignedUp={setIsSignedUpHook} />) :
-                (<SignUpForm from={from} isSignedUp={isSignedUpHook} setIsSignedUp={setIsSignedUpHook} />)}
+                (<SignUpForm from={from} isSignedUp={isSignedUpHook} setIsSignedUp={setIsSignedUpHook} />)
+            }
         </div>
     )
 }

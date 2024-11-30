@@ -67,12 +67,12 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
                     }
                     setIsCorrect(true)
 
-                    let isSignedUp = signUp(
+                    let positiveOutcome = signUp(
                         document.getElementById("login-input").value,
                         document.getElementById("password-input-1").value
                     );
 
-                    if (isSignedUp) {
+                    if (positiveOutcome) {
                         console.log("адрес перед navigate", from)
                         navigate(from, {replace: true});
                     }
@@ -82,7 +82,7 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
             <br/>
             <a onClick={() => {
                 setIsSignedUp(!isSignedUp);
-            }}>{isSignedUp ? "Sign In" : "Sign Up"}</a>
+            }}>{isSignedUp ? "Sign Up" : "Sign In"}</a>
         </div>
     )
 }
