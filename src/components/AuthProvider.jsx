@@ -2,29 +2,48 @@ import React, { createContext, useState, useContext } from 'react';
 import {crudCreate, crudRead, crudUpdate, crudDelete} from "../utils/crud.js";
 import {UserDTO} from "../utils/user.model.js";
 
-// Создаём сам контекст
 const AuthContext = createContext();
 
 const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/auth";
 
-// Компонент AuthProvider оборачивает приложение и предоставляет доступ к AuthContext
+// компонент AuthProvider оборачивает приложение и предоставляет доступ к AuthContext
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        // Читаем состояние из localStorage при инициализации
         const savedAuthState = sessionStorage.getItem("isAuthenticated");
         return savedAuthState === "true";
     });
 
     // Метод для входа в систему
     const signIn = (name, password) => {
-        // Здесь можно добавить логику аутентификации (например, запрос к API)
         console.log("Sign in...");
 
-        crudCreate(`${BASE_URL}/sign-in`, new UserDTO(name, password));
-
-        setIsAuthenticated(true);
-        sessionStorage.setItem("isAuthenticated", "true");
-        console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+        // было так:
+        // crudCreate(`${BASE_URL}/sign-in`, new UserDTO(name, password));
+        fetch(`${BASE_URL}/sign-in`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(new UserDTO(name, password)),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // Если код ответа не в диапазоне 2xx, выбрасываем ошибку
+                    throw new Error(`Ошибка сети: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((responseData) => {
+                setIsAuthenticated(true);
+                sessionStorage.setItem("isAuthenticated", "true");
+                sessionStorage.setItem("sessionToken", responseData.data.token)
+                console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+            })
+            .catch(error => {
+                console.error('Error:', error)
+                return false;
+            });
+        return true;
     };
 
     // Метод для входа в систему
@@ -32,11 +51,32 @@ export const AuthProvider = ({ children }) => {
         // Здесь можно добавить логику аутентификации (например, запрос к API)
         console.log("Sign up...");
 
-        crudCreate(`${BASE_URL}/sign-up`, new UserDTO(name, password));
-
-        setIsAuthenticated(true);
-        sessionStorage.setItem("isAuthenticated", "true");
-        console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+        // crudCreate(`${BASE_URL}/sign-up`, new UserDTO(name, password));
+        fetch(`${BASE_URL}/sign-up`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(new UserDTO(name, password)),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // Если код ответа не в диапазоне 2xx, выбрасываем ошибку
+                    throw new Error(`Ошибка сети: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((responseData) => {
+                setIsAuthenticated(true);
+                sessionStorage.setItem("isAuthenticated", "true");
+                sessionStorage.setItem("sessionToken", responseData.data.token)
+                console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+            })
+            .catch(error => {
+                console.error('Error:', error)
+                return false;
+            });
+        return true;
     };
 
     // Метод для выхода из системы
@@ -44,6 +84,7 @@ export const AuthProvider = ({ children }) => {
         console.log("Logging out...");
         setIsAuthenticated(false);
         sessionStorage.setItem("isAuthenticated", "false");
+        sessionStorage.setItem("sessionToken", null)
         console.log("isAuthenticated after logout: ", isAuthenticated, "\nexpected: false");
     };
 

@@ -18,12 +18,16 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
                 </label><br/>
                 <button onClick={() => {
                     event.preventDefault();
-                    signIn(
+                    let isSignedIn = signIn(
                         document.getElementById("login-input").value,
                         document.getElementById("password-input").value
                     );
-                    console.log("адрес перед navigate", from)
-                    navigate(from, {replace: true});
+
+                    if (isSignedIn) {
+                        console.log("адрес перед navigate", from)
+                        navigate(from, {replace: true});
+                    }
+
                 }}>Sign In
                 </button>
             </form>
