@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
             },
             body: JSON.stringify(new UserDTO(name, password)),
         })
-            .then(response => {
+/*            .then(response => {
                 if (!response.ok) {
                     // Если код ответа не в диапазоне 2xx, выбрасываем ошибку
                     throw new Error(`Ошибка сети: ${response.status}`);
@@ -71,6 +71,13 @@ export const AuthProvider = ({ children }) => {
                 sessionStorage.setItem("isAuthenticated", "true");
                 sessionStorage.setItem("sessionToken", responseData.data.token)
                 console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+                return true;
+            })*/
+            .then(response => {
+                if (!response.ok) {
+                    // Если код ответа не в диапазоне 2xx, выбрасываем ошибку
+                    throw new Error(`Ошибка сети: ${response.status}`);
+                }
                 return true;
             })
             .catch(error => {

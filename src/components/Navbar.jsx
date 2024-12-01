@@ -28,14 +28,14 @@ function Navbar() {
 
                 <div style={div_style}>
                     {
-                        !isAuthenticated &&
+                        (!isAuthenticated || sessionStorage.getItem("sessionToken") === null) &&
                         <button onClick={() => navigate("/auth")}>
                             Log In
                         </button>
                     }
 
                     {
-                        isAuthenticated &&
+                        (isAuthenticated  && sessionStorage.getItem("sessionToken") !== null) &&
                         <>
                             <h3>Твоё Имя</h3>
                             <button onClick={() => {

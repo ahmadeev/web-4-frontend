@@ -1,6 +1,7 @@
 import {useAuth} from "./AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import Auth from "../pages/Auth.jsx";
 
 function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
     const { signUp } = useAuth();
@@ -74,7 +75,8 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
                         .then(isSignedUp => {
                             if (isSignedUp) {
                                 console.log("адрес перед navigate", from)
-                                navigate(from, {replace: true});
+                                navigate(<Auth pageTitle="Войти" isSignedUp={true} />, {replace: true});
+                                // navigate(from, {replace: true});
                             }
                         })
                 }}>Sign Up
