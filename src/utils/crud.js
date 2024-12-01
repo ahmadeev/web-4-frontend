@@ -59,25 +59,12 @@ export function crudDelete(url, id) {
 //--------------------many
 
 export async function crudReadMany(url, page = 0, size = 10) {
-    try {
-        const response = await fetch(`${url}?page=${page}&size=${size}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Item data:', data);
-        return data;
-    } catch (error) {
-        console.error('Error:', error.message || error);
-        return null;
-    }
+    return fetch(`${url}?page=${page}&size=${size}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+        },
+    });
 }
 
 export async function crudDeleteMany(url) {

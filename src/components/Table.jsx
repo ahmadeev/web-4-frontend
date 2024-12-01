@@ -28,9 +28,15 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
         const loadData = async () => {
             try {
-                const response = await fetchData(readManyUrl, page, size); // Ожидаем результат функции
-                setData(response ? response.data : []); // Обрабатываем результат
-                console.log(data)
+                const response = await fetchData(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
+
+                if (!response.ok) {
+                    if (response.status === 401) logout();
+                    throw new Error();
+                }
+
+                const responseData = await response.json();
+                setData(responseData.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -39,7 +45,7 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             }
         };
 
-        loadData()
+        loadData();
         // console.log(data, data.length)
         // if (data && data.length) document.getElementById("increase-page").removeAttribute("disabled");
 
@@ -64,8 +70,6 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
         null, // No character
         head, // Dragon head
     );
-
-    console.log(dragon);
 
     return (
         <>
