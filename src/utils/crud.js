@@ -57,3 +57,34 @@ export function crudDelete(url, id) {
         })
         .catch(error => console.error('Error:', error));
 }
+
+//--------------------many
+
+export function crudReadMany(url) {
+    fetch(`${url}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+        },
+    })
+        .then(response => response.json())
+        .then(data => console.log('Item data:', data))
+        .catch(error => console.error('Error:', error));
+}
+
+export function crudDeleteMany(url) {
+    fetch(`${url}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log('Item deleted');
+            } else {
+                console.log('Failed to delete item');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}

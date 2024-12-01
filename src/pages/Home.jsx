@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import DataTable from "../components/DataTable.jsx";
 import Modal from "../components/Modal.jsx";
 import {DragonDTO, DragonCaveDTO, CoordinatesDTO, DragonHeadDTO, PersonDTO, LocationDTO} from "../utils/object.model.js"
-import {crudCreate, crudRead, crudUpdate, crudDelete} from "../utils/crud.js";
+import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
 
 function Home({ pageTitle }) {
 
@@ -80,10 +80,13 @@ function Home({ pageTitle }) {
                 <button onClick={() => crudUpdate(`${BASE_URL}/dragon`, id)}>UPDATE</button>
                 <button onClick={() => crudDelete(`${BASE_URL}/dragon`, id)}>DELETE</button>
 
+                <button onClick={() => crudReadMany(`${BASE_URL}/dragons`)}>READ MANY</button>
+                <button onClick={() => crudDeleteMany(`${BASE_URL}/dragons`)}>DELETE MANY</button>
+
                 <DataTable/>
             </div>
             <Modal active={modalActive} setActive={setModalActive}>
-            <DataTable/>
+                <DataTable/>
             </Modal>
         </>
     )
