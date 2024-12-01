@@ -1,5 +1,5 @@
 export function crudCreate(url, object) {
-    fetch(`${url}`, {
+    return fetch(`${url}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
@@ -7,9 +7,7 @@ export function crudCreate(url, object) {
         },
         body: JSON.stringify(object),
     })
-        .then(response => response.json())
-        .then(data => console.log('Created item:', data))
-        .catch(error => console.error('Error:', error));
+    //  удалена обработка !response.ok, response.status === 401, catch, превращение в json
 }
 
 export function crudRead(url, id) {

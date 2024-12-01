@@ -8,15 +8,19 @@ import {
     LocationDTO,
     PersonDTO
 } from "../utils/object.model.js";
+import {useAuth} from "./AuthProvider.jsx";
 
 const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
+    const { logout } = useAuth();
+
     const [data, setData] = useState([]);  // Состояние для данных
+
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
+
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Эмуляция получения данных (или вы можете использовать fetch, axios и т.д.)
     useEffect(() => {
         if (page === 0) document.getElementById("decrease-page").setAttribute("disabled", "")
         // if (!data || !data.length) document.getElementById("increase-page").setAttribute("disabled", "")
@@ -27,7 +31,6 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                 const response = await fetchData(readManyUrl, page, size); // Ожидаем результат функции
                 setData(response ? response.data : []); // Обрабатываем результат
                 console.log(data)
-
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -40,7 +43,7 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
         // console.log(data, data.length)
         // if (data && data.length) document.getElementById("increase-page").removeAttribute("disabled");
 
-    }, [fetchData, readManyUrl, page, size, reload]); // Пустой массив зависимостей — значит, запрос выполняется только один раз при монтировании компонента
+    }, [fetchData, readManyUrl, page, size, reload]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
     const id = 2;
@@ -67,7 +70,17 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     return (
         <>
             <button onClick={() => {
-                crudCreate(`${BASE_URL}/dragon`, dragon);
+                crudCreate(`${BASE_URL}/dragon`, dragon)
+                    .then(response => {
+                        if (!response.ok) {
+                            if (response.status === 401) logout();
+                            throw new Error();
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        console.error("Error occurred!", error);
+                    })
                 setReload(true);
             }}>CREATE</button>
             <button onClick={() => crudRead(`${BASE_URL}/dragon`, id)}>READ</button>
