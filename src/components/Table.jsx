@@ -21,6 +21,32 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
+    const loadDataWrapper = async (func, args) => {
+        try {
+            const response = await func(...args);
+
+            if (!response.ok) {
+                if (response.status === 401) logout();
+                throw new Error();
+            }
+
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (error) {
+                console.error("Error reading response body", error);
+            }
+            console.log(responseData)
+            return responseData;
+            // раньше setReload(true) был тут
+        } catch (error) {
+            console.error("Error proccessing CRUD:", error);
+            return null;
+        } finally {
+            setReload(true);
+        }
+    }
+
     useEffect(() => {
         if (page === 0) document.getElementById("decrease-page").setAttribute("disabled", "")
         // if (!data || !data.length) document.getElementById("increase-page").setAttribute("disabled", "")
@@ -46,13 +72,16 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
         };
 
         loadData();
+
+        // setData(loadDataWrapper(fetchData, [page, size]));
+        // setIsLoading(false);
+
         // console.log(data, data.length)
         // if (data && data.length) document.getElementById("increase-page").removeAttribute("disabled");
 
     }, [fetchData, readManyUrl, page, size, reload]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
-    const id = 2;
 
     // Пример создания экземпляра
     const coordinates = new CoordinatesDTO(50, 30);
@@ -74,25 +103,12 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     return (
         <>
             <button onClick={() => {
-                crudCreate(`${BASE_URL}/dragon`, dragon)
-                    .then(response => {
-                        if (!response.ok) {
-                            if (response.status === 401) logout();
-                            throw new Error();
-                        }
-                        return response.json();
-                    })
-                    .catch(error => {
-                        console.error("Error occurred!", error);
-                    })
-                setReload(true);
+                loadDataWrapper(crudCreate, [`${BASE_URL}/dragon`, dragon]);
             }}>CREATE</button>
-            <button onClick={() => crudRead(`${BASE_URL}/dragon`, id)}>READ</button>
-            <button onClick={() => crudUpdate(`${BASE_URL}/dragon`, id)}>UPDATE</button>
-            <button onClick={() => crudDelete(`${BASE_URL}/dragon`, id)}>DELETE</button>
 
-            <button onClick={() => crudReadMany(`${BASE_URL}/dragons`)}>READ MANY</button>
-            <button onClick={() => crudDeleteMany(`${BASE_URL}/dragons`)}>DELETE MANY</button>
+            <button onClick={() => {
+                loadDataWrapper(crudDeleteMany, [`${BASE_URL}/dragons`]);
+            }}>DELETE MANY</button>
 
             <h1>Таблица данных</h1>
             <table border="1">
@@ -136,23 +152,21 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                         <td>{item.character}</td>
                         <td>{item.head.toString()}</td>
                         <td>
-                            <button>
+                            <button onClick={() => {
+                                // crudUpdate(`${BASE_URL}/dragon`, id);
+                                // setReload(true);
+                            }}>
                                 /
                             </button>
                         </td>
                         <td>
                             <button onClick={() => {
-                                crudDelete(deleteOneUrl, item.id)
-                                setReload(true);
+                                loadDataWrapper(crudDelete, [deleteOneUrl, item.id])
                             }}>X
                             </button>
                         </td>
                     </tr>
                 ))}
-
-                {
-                    console.log(data)
-                }
                 </tbody>
             </table>
             <button id="decrease-page" onClick={async () => {

@@ -1,3 +1,5 @@
+//-------------one-at-a-time
+
 export function crudCreate(url, object) {
     return fetch(`${url}`, {
         method: 'POST',
@@ -11,19 +13,16 @@ export function crudCreate(url, object) {
 }
 
 export function crudRead(url, id) {
-    fetch(`${url}/${id}`, {
+    return fetch(`${url}/${id}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
         },
     })
-        .then(response => response.json())
-        .then(data => console.log('Item data:', data))
-        .catch(error => console.error('Error:', error));
 }
 
 export function crudUpdate(url, id) {
-    fetch(`${url}/${id}`, {
+    return fetch(`${url}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -32,33 +31,22 @@ export function crudUpdate(url, id) {
         body: JSON.stringify({
             name: 'Updated Item',
             description: 'Updated description of the item',
-        }),
+        }), // сюда засунуть обновляемый объект
     })
-        .then(response => response.json())
-        .then(data => console.log('Updated item:', data))
-        .catch(error => console.error('Error:', error));
 }
 
 export function crudDelete(url, id) {
-    fetch(`${url}/${id}`, {
+    return fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
         },
     })
-        .then(response => {
-            if (response.ok) {
-                console.log('Item deleted');
-            } else {
-                console.log('Failed to delete item');
-            }
-        })
-        .catch(error => console.error('Error:', error));
 }
 
 //--------------------many
 
-export async function crudReadMany(url, page = 0, size = 10) {
+export function crudReadMany(url, page = 0, size = 10) {
     return fetch(`${url}?page=${page}&size=${size}`, {
         method: 'GET',
         headers: {
@@ -67,24 +55,11 @@ export async function crudReadMany(url, page = 0, size = 10) {
     });
 }
 
-export async function crudDeleteMany(url) {
-    try {
-        const response = await fetch(`${url}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
-            }
-        })
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+export function crudDeleteMany(url) {
+    return fetch(`${url}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
         }
-
-        const data = await response.json();
-        console.log('Item data:', data);
-        return data;
-    } catch (error) {
-        console.error('Error:', error.message || error);
-        return null;
-    }
+    })
 }
