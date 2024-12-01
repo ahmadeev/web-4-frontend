@@ -60,31 +60,46 @@ export function crudDelete(url, id) {
 
 //--------------------many
 
-export function crudReadMany(url) {
-    fetch(`${url}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
-        },
-    })
-        .then(response => response.json())
-        .then(data => console.log('Item data:', data))
-        .catch(error => console.error('Error:', error));
+export async function crudReadMany(url, page = 0, size = 10) {
+    try {
+        const response = await fetch(`${url}?page=${page}&size=${size}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Item data:', data);
+        return data;
+    } catch (error) {
+        console.error('Error:', error.message || error);
+        return null;
+    }
 }
 
-export function crudDeleteMany(url) {
-    fetch(`${url}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
-        },
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log('Item deleted');
-            } else {
-                console.log('Failed to delete item');
+export async function crudDeleteMany(url) {
+    try {
+        const response = await fetch(`${url}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
             }
         })
-        .catch(error => console.error('Error:', error));
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Item data:', data);
+        return data;
+    } catch (error) {
+        console.error('Error:', error.message || error);
+        return null;
+    }
 }

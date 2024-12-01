@@ -5,6 +5,7 @@ import DataTable from "../components/DataTable.jsx";
 import Modal from "../components/Modal.jsx";
 import {DragonDTO, DragonCaveDTO, CoordinatesDTO, DragonHeadDTO, PersonDTO, LocationDTO} from "../utils/object.model.js"
 import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
+import Table from "../components/Table.jsx";
 
 function Home({ pageTitle }) {
 
@@ -83,7 +84,7 @@ function Home({ pageTitle }) {
                 <button onClick={() => crudReadMany(`${BASE_URL}/dragons`)}>READ MANY</button>
                 <button onClick={() => crudDeleteMany(`${BASE_URL}/dragons`)}>DELETE MANY</button>
 
-                <DataTable/>
+                <Table fetchData={crudReadMany} readManyUrl={`${BASE_URL}/dragons`} deleteOneUrl={`${BASE_URL}/dragon`} />
             </div>
             <Modal active={modalActive} setActive={setModalActive}>
                 <DataTable/>
