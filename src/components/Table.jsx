@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import {crudDelete} from "../utils/crud.js";
+import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadMany, crudUpdate} from "../utils/crud.js";
+import {
+    CoordinatesDTO,
+    DragonCaveDTO,
+    DragonDTO,
+    DragonHeadDTO,
+    LocationDTO,
+    PersonDTO
+} from "../utils/object.model.js";
 
 const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const [data, setData] = useState([]);  // Состояние для данных
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
     const [reload, setReload] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Эмуляция получения данных (или вы можете использовать fetch, axios и т.д.)
     useEffect(() => {
@@ -23,6 +32,7 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                 console.error("Error fetching data:", error);
             } finally {
                 setReload(false);
+                setIsLoading(false);
             }
         };
 
@@ -32,8 +42,41 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
     }, [fetchData, readManyUrl, page, size, reload]); // Пустой массив зависимостей — значит, запрос выполняется только один раз при монтировании компонента
 
+    const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
+    const id = 2;
+
+    // Пример создания экземпляра
+    const coordinates = new CoordinatesDTO(50, 30);
+    const cave = new DragonCaveDTO(15);
+    const killer = new PersonDTO("killer", "WHITE", "WHITE", new LocationDTO(1, 1, 1), new Date().toISOString().split('T')[0], 200);
+    const head = new DragonHeadDTO(200, 100500);
+    const dragon = new DragonDTO(
+        "Fire Dragon",
+        coordinates,
+        cave,
+        killer,
+        200,  // Age,
+        "A fierce and powerful dragon", // Description
+        150,  // Wingspan
+        null, // No character
+        head, // Dragon head
+    );
+
+    console.log(dragon);
+
     return (
         <>
+            <button onClick={() => {
+                crudCreate(`${BASE_URL}/dragon`, dragon);
+                setReload(true);
+            }}>CREATE</button>
+            <button onClick={() => crudRead(`${BASE_URL}/dragon`, id)}>READ</button>
+            <button onClick={() => crudUpdate(`${BASE_URL}/dragon`, id)}>UPDATE</button>
+            <button onClick={() => crudDelete(`${BASE_URL}/dragon`, id)}>DELETE</button>
+
+            <button onClick={() => crudReadMany(`${BASE_URL}/dragons`)}>READ MANY</button>
+            <button onClick={() => crudDeleteMany(`${BASE_URL}/dragons`)}>DELETE MANY</button>
+
             <h1>Таблица данных</h1>
             <table border="1">
                 <thead>
@@ -53,8 +96,15 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                 </tr>
                 </thead>
                 <tbody>
-                {(!data || !data.length) && (
-                    <tr><td colSpan="12" style={{ textAlign: "center" }}>Данные отсутствуют</td></tr>
+                {isLoading && (
+                    <tr>
+                        <td colSpan="12" style={{textAlign: "center"}}>Загрузка данных...</td>
+                    </tr>
+                )}
+                {!isLoading && (!data || !data.length) && (
+                    <tr>
+                        <td colSpan="12" style={{textAlign: "center"}}>Данные отсутствуют</td>
+                    </tr>
                 )}
                 {data && data.map(item => (
                     <tr key={item.id}>
@@ -68,11 +118,18 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                         <td>{item.wingspan}</td>
                         <td>{item.character}</td>
                         <td>{item.head.toString()}</td>
-                        <td>E</td>
-                        <td><button onClick={() => {
-                            crudDelete(deleteOneUrl, item.id)
-                            setReload(true);
-                        }}>X</button></td>
+                        <td>
+                            <button>
+                                /
+                            </button>
+                        </td>
+                        <td>
+                            <button onClick={() => {
+                                crudDelete(deleteOneUrl, item.id)
+                                setReload(true);
+                            }}>X
+                            </button>
+                        </td>
                     </tr>
                 ))}
 
@@ -83,11 +140,13 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             </table>
             <button id="decrease-page" onClick={async () => {
                 await setPage(page - 1);
-            }}>left</button>
+            }}>left
+            </button>
             <button id="increase-page" onClick={async () => {
                 await setPage(page + 1);
                 document.getElementById("decrease-page").removeAttribute("disabled");
-            }}>right</button>
+            }}>right
+            </button>
         </>
     );
 };

@@ -32,6 +32,7 @@ function Navbar() {
                         <button onClick={() => navigate("/auth")}>
                             Log In
                         </button>
+                        // <p><span>Sign In</span> / <span>Sign In</span></p>
                     }
 
                     {

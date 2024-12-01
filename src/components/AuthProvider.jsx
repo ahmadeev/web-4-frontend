@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext } from 'react';
-import {crudCreate, crudRead, crudUpdate, crudDelete} from "../utils/crud.js";
 import {UserDTO} from "../utils/user.model.js";
 
 const AuthContext = createContext();
@@ -59,20 +58,6 @@ export const AuthProvider = ({ children }) => {
             },
             body: JSON.stringify(new UserDTO(name, password)),
         })
-/*            .then(response => {
-                if (!response.ok) {
-                    // Если код ответа не в диапазоне 2xx, выбрасываем ошибку
-                    throw new Error(`Ошибка сети: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((responseData) => {
-                setIsAuthenticated(true);
-                sessionStorage.setItem("isAuthenticated", "true");
-                sessionStorage.setItem("sessionToken", responseData.data.token)
-                console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
-                return true;
-            })*/
             .then(response => {
                 if (!response.ok) {
                     // Если код ответа не в диапазоне 2xx, выбрасываем ошибку

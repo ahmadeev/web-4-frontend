@@ -24,8 +24,16 @@
     padding: 20px;
     border-radius: 12px;
     background-color: #fff;
-    height: 400px;
-    width: 600px;
+    min-height: 400px;
+    min-width: 600px;
+
+    max-height: 80%;
+    max-width: 90%;
+
+    height: auto;
+    width: auto;
+
+    overflow: auto;
 
     transform: scale(0.5);
     transition: 0.4s all;

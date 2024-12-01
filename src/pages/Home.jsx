@@ -3,39 +3,21 @@ import styles from "../page-styles/Home.module.css";
 import {useEffect, useState} from "react";
 import DataTable from "../components/DataTable.jsx";
 import Modal from "../components/Modal.jsx";
-import {DragonDTO, DragonCaveDTO, CoordinatesDTO, DragonHeadDTO, PersonDTO, LocationDTO} from "../utils/object.model.js"
 import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
 import Table from "../components/Table.jsx";
+import CreateDragon from "../components/CreateDragon.jsx";
 
 function Home({ pageTitle }) {
 
     const [modalActive, setModalActive] = useState(false);
+
+    const [createDragonModalActive, setCreateDragonModalActive] = useState(false);
 
     useEffect(() => {
         document.title = pageTitle;
     })
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
-    const id = 2;
-
-    // Пример создания экземпляра
-    const coordinates = new CoordinatesDTO(50, 30);
-    const cave = new DragonCaveDTO(15);
-    const killer = new PersonDTO("killer", "WHITE", "WHITE", new LocationDTO(1, 1, 1), new Date().toISOString().split('T')[0], 200);
-    const head = new DragonHeadDTO(200, 100500);
-    const dragon = new DragonDTO(
-        "Fire Dragon",
-        coordinates,
-        cave,
-        killer,
-        200,  // Age,
-        "A fierce and powerful dragon", // Description
-        150,  // Wingspan
-        null, // No character
-        head, // Dragon head
-    );
-
-    console.log(dragon);
 
     return (
         <>
@@ -76,18 +58,18 @@ function Home({ pageTitle }) {
 
                 <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
 
-                <button onClick={() => crudCreate(`${BASE_URL}/dragon`, dragon)}>CREATE</button>
-                <button onClick={() => crudRead(`${BASE_URL}/dragon`, id)}>READ</button>
-                <button onClick={() => crudUpdate(`${BASE_URL}/dragon`, id)}>UPDATE</button>
-                <button onClick={() => crudDelete(`${BASE_URL}/dragon`, id)}>DELETE</button>
+                <button onClick={() => setCreateDragonModalActive(true)}>CREATE POPUP</button>
 
-                <button onClick={() => crudReadMany(`${BASE_URL}/dragons`)}>READ MANY</button>
-                <button onClick={() => crudDeleteMany(`${BASE_URL}/dragons`)}>DELETE MANY</button>
-
-                <Table fetchData={crudReadMany} readManyUrl={`${BASE_URL}/dragons`} deleteOneUrl={`${BASE_URL}/dragon`} />
+                <Table fetchData={crudReadMany} readManyUrl={`${BASE_URL}/dragons`}
+                       deleteOneUrl={`${BASE_URL}/dragon`}/>
             </div>
+
+            <Modal active={createDragonModalActive} setActive={setCreateDragonModalActive}>
+                <CreateDragon />
+            </Modal>
+
             <Modal active={modalActive} setActive={setModalActive}>
-                <DataTable/>
+            <DataTable/>
             </Modal>
         </>
     )
