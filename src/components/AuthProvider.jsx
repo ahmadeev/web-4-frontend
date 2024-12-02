@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
         return savedAuthState === "true";
     });
 
-    // Метод для входа в систему
+    // метод для входа в систему
     const signIn = (name, password) => {
         console.log("Sign in...");
 
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         })
             .then(response => {
                 if (!response.ok) {
-                    // Если код ответа не в диапазоне 2xx, выбрасываем ошибку
+                    // если код ответа не в диапазоне 2xx, выбрасываем ошибку
                     throw new Error(`Ошибка сети: ${response.status}`);
                 }
                 return response.json();
@@ -37,17 +37,16 @@ export const AuthProvider = ({ children }) => {
                 sessionStorage.setItem("isAuthenticated", "true");
                 sessionStorage.setItem("sessionToken", responseData.data.token)
                 console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
-                return true;
+                return responseData;
             })
             .catch(error => {
                 console.error('Error:', error)
-                return false;
+                throw new Error();
             });
     };
 
-    // Метод для входа в систему
+    // метод для регистрации в системе
     const signUp = (name, password) => {
-        // Здесь можно добавить логику аутентификации (например, запрос к API)
         console.log("Sign up...");
 
         // crudCreate(`${BASE_URL}/sign-up`, new UserDTO(name, password));
@@ -58,17 +57,6 @@ export const AuthProvider = ({ children }) => {
             },
             body: JSON.stringify(new UserDTO(name, password)),
         })
-            .then(response => {
-                if (!response.ok) {
-                    // Если код ответа не в диапазоне 2xx, выбрасываем ошибку
-                    throw new Error(`Ошибка сети: ${response.status}`);
-                }
-                return true;
-            })
-            .catch(error => {
-                console.error('Error:', error)
-                return false;
-            });
     };
 
     // Метод для выхода из системы

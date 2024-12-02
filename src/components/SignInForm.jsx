@@ -9,7 +9,7 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
         <div>
             <form>
                 <label>
-                    Введите имя пользователя или электронную почту:<br/>
+                    Введите имя пользователя:<br/>
                     <input id="login-input" className="login-input" type="text"/>
                 </label><br/>
                 <label>

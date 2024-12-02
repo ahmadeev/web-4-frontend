@@ -1,84 +1,121 @@
 import {useAuth} from "./AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import Auth from "../pages/Auth.jsx";
 
 function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
     const { signUp } = useAuth();
     const navigate = useNavigate();
 
-    const [isCorrect, setIsCorrect] = useState(true);
+    const [incorrectPasswordsError, setIncorrectPasswordsError] = useState(false);
+    const [userExistsError, setUserExistsError] = useState(false);
+    const [invalidUsernameError, setInvalidUsernameError] = useState(false);
+
+    const [submitButtonState, setSubmitButtonState] = useState(false);
+
+    // считается хорошей практикой использовать хуки для обработки (иначе нарушается реактивность приложения)
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     useEffect(() => {
-        const passwordInputOne = document.getElementById("password-input-1")
-        const passwordInputTwo = document.getElementById("password-input-2")
+        const isUsernameValid = checkIsValidUsername(username);
+        const isPasswordValid = comparePasswords(password, confirmPassword);
 
-        passwordInputOne.addEventListener("focusout", e => {
-            if (passwordInputTwo.value !== "" && passwordInputTwo.value !== passwordInputOne.value) {
-                setIsCorrect(false);
-            } else {
-                setIsCorrect(true)
-            }
-        })
+        if (username !== "" && !isUsernameValid) setInvalidUsernameError(true);
+        else setInvalidUsernameError(false);
 
-        passwordInputTwo.addEventListener("focusout", e => {
-            if (passwordInputOne.value !== "" && passwordInputTwo.value !== passwordInputOne.value) {
-                setIsCorrect(false);
-            } else {
-                setIsCorrect(true)
-            }
-        })
+        if (password !== "" && confirmPassword !== "" && !isPasswordValid) setIncorrectPasswordsError(true);
+        else setIncorrectPasswordsError(false);
 
-        passwordInputOne.addEventListener("input", e => {
-            setIsCorrect(true);
-        })
+        if (isUsernameValid && isPasswordValid) {
+            setSubmitButtonState(true);
+        } else {
+            setSubmitButtonState(false);
+        }
+    },[username, password, confirmPassword])
 
-        passwordInputTwo.addEventListener("input", e => {
-            setIsCorrect(true);
-        })
-    }, [])
+    const checkIsValidUsername = (username) => {
+        return username && username.match(/^[a-zA-Z0-9]{4,}$/g);
+    }
+
+    const handleUsernameChange = (e) => {
+        setUsername(e.target.value);
+    }
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+    };
+
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
+    };
+
+    const comparePasswords = (password1, password2) => {
+        return password1 && password2 && password1 === password2
+    };
 
     return (
         <div>
             <form>
                 <label>
-                    Введите имя пользователя или электронную почту:<br/>
-                    <input id="login-input" className="login-input" type="text"/>
+                    Введите имя пользователя:<br/>
+                    <input
+                        value={username}
+                        onChange={handleUsernameChange}
+                        className="login-input"
+                        type="text"
+                    />
                 </label><br/>
                 <label>
-                Введите пароль:<br/>
-                    <input id="password-input-1" className="password-input" type="password"/>
+                    Введите пароль:<br/>
+                    <input
+                        value={password}
+                        onChange={handlePasswordChange}
+                        className="password-input"
+                        type="password"
+                    />
                 </label><br/>
                 <label>
                     Повторите пароль:<br/>
-                    <input id="password-input-2" className="password-input" type="password"/>
+                    <input
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                        className="password-input"
+                        type="password"
+                    />
                 </label><br/>
                 {
-                    !isCorrect && <h5>Пароли не совпадают!</h5>
+                    incorrectPasswordsError && <h5>Пароли не совпадают!</h5>
                 }
-                <button onClick={() => {
+
+                {
+                    userExistsError && <h5>Пользователь уже существует!</h5>
+                }
+
+                {
+                    invalidUsernameError &&
+                    <h5>Имя пользователя должно содержать минимум 4 символа!
+                        Имя пользователя может содержать строчные и заглавные символы латинского алфавита и цифры.</h5>
+
+                }
+
+                <button disabled={(!submitButtonState)} onClick={() => {
                     event.preventDefault();
 
-                    if (
-                        document.getElementById("password-input-1").value !==
-                        document.getElementById("password-input-2").value
-                    ) {
-                        setIsCorrect(false);
-                        return;
-                    }
-                    setIsCorrect(true)
-
                     signUp(
-                        document.getElementById("login-input").value,
-                        document.getElementById("password-input-1").value
+                        username,
+                        password
                     )
-                        .then(isSignedUp => {
-                            if (isSignedUp) {
+                        .then(response => response.json())
+                        .then(responseData => {
+                            if (responseData.status === "SUCCESS") {
                                 console.log("адрес перед navigate", from)
-                                navigate(<Auth pageTitle="Войти" isSignedUp={true} />, {replace: true});
-                                // navigate(from, {replace: true});
+                                navigate("/auth", {replace: true});
+                            } else {
+                                setUserExistsError(true);
                             }
                         })
+                        .catch(error => console.error(error))
                 }}>Sign Up
                 </button>
             </form>
