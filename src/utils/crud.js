@@ -21,17 +21,14 @@ export function crudRead(url, id) {
     })
 }
 
-export function crudUpdate(url, id) {
+export function crudUpdate(url, id, object=null) {
     return fetch(`${url}/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
         },
-        body: JSON.stringify({
-            name: 'Updated Item',
-            description: 'Updated description of the item',
-        }), // сюда засунуть обновляемый объект
+        body: JSON.stringify({object}), // сюда засунуть обновляемый объект
     })
 }
 

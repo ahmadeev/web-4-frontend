@@ -43,8 +43,11 @@ function Home({ pageTitle }) {
                 <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
                 <button onClick={showAlert}>ALERT</button>
 
-                <DragonTable fetchData={crudReadMany} readManyUrl={`${BASE_URL}/dragons`}
-                             deleteOneUrl={`${BASE_URL}/dragon`}/>
+                <DragonTable
+                    fetchData={crudReadMany}
+                    readManyUrl={`${BASE_URL}/dragons`}
+                    deleteOneUrl={`${BASE_URL}/dragon`}
+                />
             </div>
 
             <Modal active={createDragonModalActive} setActive={setCreateDragonModalActive}>
