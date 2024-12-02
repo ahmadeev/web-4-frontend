@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     // метод для регистрации в системе
-    const signUp = (name, password) => {
+    const signUp = (name, password, isAdmin) => {
         console.log("Sign up...");
 
         // crudCreate(`${BASE_URL}/sign-up`, new UserDTO(name, password));
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(new UserDTO(name, password)),
+            body: JSON.stringify(new UserDTO(name, password, isAdmin)),
         })
     };
 
