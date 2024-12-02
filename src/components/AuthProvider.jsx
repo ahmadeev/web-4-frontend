@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
         return savedAuthState === "true";
     });
 
+    const [username, setUsername] = useState(sessionStorage.getItem("session-username"));
+
     // метод для входа в систему
     const signIn = (name, password) => {
         console.log("Sign in...");
@@ -31,8 +33,10 @@ export const AuthProvider = ({ children }) => {
             .then((responseData) => {
                 if (responseData.status === "SUCCESS") {
                     setIsAuthenticated(true);
+                    setUsername(name);
                     sessionStorage.setItem("isAuthenticated", "true");
                     sessionStorage.setItem("sessionToken", responseData.data.token)
+                    sessionStorage.setItem("session-username", name)
                     console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
                 }
                 return responseData;
@@ -60,8 +64,10 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         console.log("Logging out...");
         setIsAuthenticated(false);
+        setUsername("");
         sessionStorage.setItem("isAuthenticated", "false");
         sessionStorage.setItem("sessionToken", null)
+        sessionStorage.setItem("session-username", "")
         console.log("isAuthenticated after logout: ", isAuthenticated, "\nexpected: false");
     };
 
@@ -80,7 +86,7 @@ export const AuthProvider = ({ children }) => {
 
     // значения, которые будут доступны всем компонентам, использующим AuthContext
     return (
-        <AuthContext.Provider value={{ isAuthenticated, signIn, signUp, logout, checkAuthStatus }}>
+        <AuthContext.Provider value={{ isAuthenticated, username, signIn, signUp, logout, checkAuthStatus }}>
             {children}
         </AuthContext.Provider>
     );

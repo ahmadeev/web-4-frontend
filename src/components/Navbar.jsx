@@ -4,11 +4,10 @@ import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "./AuthProvider.jsx";
 
 function Navbar() {
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, username, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.pathname || "/"
-    console.log("извне: ", from);
 
     const div_style = {
         height: "100%",
@@ -39,7 +38,7 @@ function Navbar() {
                     {
                         (isAuthenticated  && sessionStorage.getItem("sessionToken") !== null) &&
                         <>
-                            <h3>Твоё Имя</h3>
+                            <h3>{username}</h3>
                             <button onClick={() => {
                                 console.log(from)
                                 logout();
@@ -50,9 +49,6 @@ function Navbar() {
                         </>
                     }
                 </div>
-
-
-
             </nav>
         </>
     )
