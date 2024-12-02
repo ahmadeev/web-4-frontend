@@ -6,9 +6,12 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
     const { signUp } = useAuth();
     const navigate = useNavigate();
 
-    const [incorrectPasswordsError, setIncorrectPasswordsError] = useState(false);
-    const [userExistsError, setUserExistsError] = useState(false);
+    // ошибки, пришедшие в ответе с сервера
+    const [responseError, setResponseError] = useState("");
+
+    // ошибки клиентской валидации
     const [invalidUsernameError, setInvalidUsernameError] = useState(false);
+    const [incorrectPasswordsError, setIncorrectPasswordsError] = useState(false);
 
     const [submitButtonState, setSubmitButtonState] = useState(false);
 
@@ -84,19 +87,19 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
                         type="password"
                     />
                 </label><br/>
-                {
-                    incorrectPasswordsError && <h5>Пароли не совпадают!</h5>
-                }
 
                 {
-                    userExistsError && <h5>Пользователь уже существует!</h5>
+                    responseError !== "" && <h5>{responseError}</h5>
                 }
 
                 {
                     invalidUsernameError &&
                     <h5>Имя пользователя должно содержать минимум 4 символа!
                         Имя пользователя может содержать строчные и заглавные символы латинского алфавита и цифры.</h5>
+                }
 
+                {
+                    incorrectPasswordsError && <h5>Пароли не совпадают!</h5>
                 }
 
                 <button disabled={(!submitButtonState)} onClick={() => {
@@ -112,7 +115,7 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
                                 console.log("адрес перед navigate", from)
                                 navigate("/auth", {replace: true});
                             } else {
-                                setUserExistsError(true);
+                                setResponseError(responseData.details);
                             }
                         })
                         .catch(error => console.error(error))

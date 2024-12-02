@@ -1,9 +1,12 @@
 import {useAuth} from "./AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 function SignInForm({ from, isSignedUp, setIsSignedUp }) {
     const { signIn } = useAuth();
     const navigate = useNavigate();
+
+    const [responseError, setResponseError] = useState("");
 
     return (
         <div>
@@ -16,6 +19,21 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
                     Введите пароль:<br/>
                     <input id="password-input" className="password-input" type="password"/>
                 </label><br/>
+
+{/*
+                {
+                    userNotExistsError && <h5>Пользователь с таким именем не существует!</h5>
+                }
+
+                {
+                    incorrectPasswordsError && <h5>Неверный пароль!</h5>
+                }
+*/}
+                {
+                    responseError !== "" && <h5>{responseError}</h5>
+                }
+
+
                 <button onClick={() => {
                     event.preventDefault();
 
@@ -23,10 +41,12 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
                         document.getElementById("login-input").value,
                         document.getElementById("password-input").value
                     )
-                        .then(isSignedIn => {
-                            if (isSignedIn) {
+                        .then(responseData => {
+                            if (responseData.status === "SUCCESS") {
                                 console.log("адрес перед navigate", from)
                                 navigate(from, {replace: true});
+                            } else {
+                                setResponseError(responseData.details);
                             }
                         })
                 }}>Sign In

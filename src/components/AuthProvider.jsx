@@ -26,22 +26,19 @@ export const AuthProvider = ({ children }) => {
             body: JSON.stringify(new UserDTO(name, password)),
         })
             .then(response => {
-                if (!response.ok) {
-                    // если код ответа не в диапазоне 2xx, выбрасываем ошибку
-                    throw new Error(`Ошибка сети: ${response.status}`);
-                }
                 return response.json();
             })
             .then((responseData) => {
-                setIsAuthenticated(true);
-                sessionStorage.setItem("isAuthenticated", "true");
-                sessionStorage.setItem("sessionToken", responseData.data.token)
-                console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+                if (responseData.status === "SUCCESS") {
+                    setIsAuthenticated(true);
+                    sessionStorage.setItem("isAuthenticated", "true");
+                    sessionStorage.setItem("sessionToken", responseData.data.token)
+                    console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+                }
                 return responseData;
             })
             .catch(error => {
                 console.error('Error:', error)
-                throw new Error();
             });
     };
 
