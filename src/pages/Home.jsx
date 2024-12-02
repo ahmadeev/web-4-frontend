@@ -6,12 +6,19 @@ import Modal from "../components/Modal.jsx";
 import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
 import Table from "../components/Table.jsx";
 import CreateDragon from "../components/CreateDragon.jsx";
+import Alert from "../components/Alert.jsx";
 
 function Home({ pageTitle }) {
 
     const [modalActive, setModalActive] = useState(false);
-
     const [createDragonModalActive, setCreateDragonModalActive] = useState(false);
+
+    const [alertActive, setAlertActive] = useState(false);
+
+    const showAlert = () => {
+        setAlertActive(true);
+    };
+
 
     useEffect(() => {
         document.title = pageTitle;
@@ -34,6 +41,7 @@ function Home({ pageTitle }) {
 
                 <button onClick={() => setCreateDragonModalActive(true)}>CREATE POPUP</button>
                 <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
+                <button onClick={showAlert}>ALERT</button>
 
                 <Table fetchData={crudReadMany} readManyUrl={`${BASE_URL}/dragons`}
                        deleteOneUrl={`${BASE_URL}/dragon`}/>
@@ -46,6 +54,12 @@ function Home({ pageTitle }) {
             <Modal active={modalActive} setActive={setModalActive}>
                 <DataTable/>
             </Modal>
+
+            <Alert
+                message="This is a custom alert!"
+                isActive={alertActive}
+                onClose={() => setAlertActive(false)}
+            />
         </>
     )
 }
