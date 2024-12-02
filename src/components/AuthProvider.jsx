@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
         })
     };
 
-    // Метод для выхода из системы
+    // метод для выхода из системы
     const logout = () => {
         console.log("Logging out...");
         setIsAuthenticated(false);
@@ -66,19 +66,19 @@ export const AuthProvider = ({ children }) => {
     };
 
     const checkAuthStatus = async () => {
-        // Здесь запрос к API для проверки состояния аутентификации
-        // Например, проверка валидности токена
+        // здесь запрос к API для проверки состояния аутентификации
+        // например, проверка валидности токена
         const status = await fetchAuthStatus();
         setIsAuthenticated(status);
     }
 
     const fetchAuthStatus = async () => {
-        // Здесь логика для обращения к API или проверка localStorage
+        // здесь логика для обращения к API или проверка localStorage
         const savedAuthState = sessionStorage.getItem("isAuthenticated");
         return savedAuthState === "true";
     };
 
-    // Значения, которые будут доступны всем компонентам, использующим AuthContext
+    // значения, которые будут доступны всем компонентам, использующим AuthContext
     return (
         <AuthContext.Provider value={{ isAuthenticated, signIn, signUp, logout, checkAuthStatus }}>
             {children}
@@ -86,5 +86,5 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-// Хук для удобного доступа к AuthContext
+// хук для удобного доступа к AuthContext
 export const useAuth = () => useContext(AuthContext);

@@ -169,15 +169,20 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                 ))}
                 </tbody>
             </table>
-            <button id="decrease-page" onClick={async () => {
-                await setPage(page - 1);
-            }}>left
-            </button>
-            <button id="increase-page" onClick={async () => {
-                await setPage(page + 1);
-                document.getElementById("decrease-page").removeAttribute("disabled");
-            }}>right
-            </button>
+
+            <div>
+                <button id="decrease-page" onClick={async () => {
+                    await setPage(page - 1);
+                }}>left
+                </button>
+                <p>{page+1}</p>
+                <button id="increase-page" onClick={async () => {
+                    await setPage(page + 1);
+                    document.getElementById("decrease-page").removeAttribute("disabled");
+                }}>right
+                </button>
+            </div>
+
         </>
     );
 };

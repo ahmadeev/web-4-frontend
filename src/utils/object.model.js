@@ -39,7 +39,7 @@ export class DragonHeadDTO {
 
 export class DragonDTO {
     constructor(name, coordinates, cave, killer = null, age = 0, description = null, wingspan, character = null, head = null) {
-        // Проверка на обязательные поля и их валидность
+        // проверка на обязательные поля и их валидность
         if (!name || typeof name !== 'string' || name.trim() === '') {
             throw new Error('Name cannot be null or empty');
         }
@@ -56,7 +56,7 @@ export class DragonDTO {
             throw new Error('Wingspan must be greater than 0');
         }
 
-        // Установка значений свойств
+        // установка значений свойств
         this.name = name;
         this.coordinates = coordinates;
         this.cave = cave;

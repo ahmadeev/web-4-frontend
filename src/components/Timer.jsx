@@ -54,16 +54,10 @@ function Timer({ event, date_of_event_string }) {
                 <div className={styles.gradient}>
                     <h1>{event.toUpperCase()}</h1>
                 </div>
-                {/*<h2>{time.getMonth()} месяцев {time.getDate()} дней {time.getHours()} часов {time.getMinutes()} минут {time.getSeconds()} секунд</h2>*/}
-                {/*<h2>{time.getMonth()} m : {time.getDate()} d : {time.getHours()} h : {time.getMinutes()} min : {time.getSeconds()} s</h2>*/}
                 <h1>
-                    {/*{formatDate(Math.floor(time / (24 * 60 * 60)))} : {formatDate(Math.floor(time % (24 * 60 * 60) / (60 * 60)))} : {formatDate(Math.floor(time % (24 * 60 * 60) % (60 * 60) / 60))} : {formatDate(Math.floor(time % (24 * 60 * 60) % (60 * 60) % 60))}*/}
                     {formatDateWord(Math.floor(time / (24 * 60 * 60)), day_words)} : {formatDateWord(Math.floor(time % (24 * 60 * 60) / (60 * 60)), hours_words)} : {formatDateWord(Math.floor(time % (24 * 60 * 60) % (60 * 60) / 60), minutes_words)} : {formatDateWord(Math.floor(time % (24 * 60 * 60) % (60 * 60) % 60), seconds_words)}
                 </h1>
-                {/*<h1>{formatDateWord(Math.floor(time / (24 * 60 * 60)), day_words)}</h1>*/}
-                {/*<h1>{formatDateWord(Math.floor(time % (24 * 60 * 60) / (60 * 60)), hours_words)}</h1>*/}
-                {/*<h1>{formatDateWord(Math.floor(time % (24 * 60 * 60) % (60 * 60) / 60), minutes_words)}</h1>*/}
-                {/*<h1>{formatDateWord(Math.floor(time % (24 * 60 * 60) % (60 * 60) % 60), seconds_words)}</h1>*/}
+
             </div>
         </>
     )

@@ -40,6 +40,7 @@ function Modal({ active, setActive, children }) {
     }, [active]);
 
     return (
+        // чтобы окно не висел в DOM
         // active && (
         //     ...
         // )

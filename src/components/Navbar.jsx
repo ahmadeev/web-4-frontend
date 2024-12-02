@@ -25,13 +25,13 @@ function Navbar() {
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/ny">новый год</NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/vbd">др вики</NavLink>
 
-
                 <div style={div_style}>
                     {
                         (!isAuthenticated || sessionStorage.getItem("sessionToken") === null) &&
                         <button onClick={() => navigate("/auth")}>
                             Log In
                         </button>
+                        // было бы удобнее:
                         // <p><span>Sign In</span> / <span>Sign In</span></p>
                     }
 

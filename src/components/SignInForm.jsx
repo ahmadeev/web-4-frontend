@@ -6,6 +6,7 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
     const { signIn } = useAuth();
     const navigate = useNavigate();
 
+    // ошибки, пришедшие в ответе с сервера
     const [responseError, setResponseError] = useState("");
 
     return (
@@ -20,19 +21,9 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
                     <input id="password-input" className="password-input" type="password"/>
                 </label><br/>
 
-{/*
-                {
-                    userNotExistsError && <h5>Пользователь с таким именем не существует!</h5>
-                }
-
-                {
-                    incorrectPasswordsError && <h5>Неверный пароль!</h5>
-                }
-*/}
                 {
                     responseError !== "" && <h5>{responseError}</h5>
                 }
-
 
                 <button onClick={() => {
                     event.preventDefault();

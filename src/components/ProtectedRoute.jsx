@@ -9,23 +9,23 @@ const ProtectedRoute = ({ children }) => {
 
     useEffect(() => {
         const updateAuthStatus = async () => {
-            await checkAuthStatus(); // Проверка статуса
-            setIsLoading(false); // Завершаем загрузку после обновления статуса
+            await checkAuthStatus(); // проверка статуса
+            setIsLoading(false); // завершаем загрузку после обновления статуса
         };
 
         updateAuthStatus();
     }, [checkAuthStatus]);
 
     if (isLoading) {
-        // Показать загрузку, пока статус проверяется
+        // показать загрузку, пока статус проверяется
         return <div>Загрузка...</div>;
     }
 
     if (!isAuthenticated) {
-        // Если пользователь не авторизован, перенаправляем его на страницу входа
+        // если пользователь не авторизован, перенаправляем его на страницу входа
         return <Navigate to="/auth" state={{ from: location }} replace />;
     }
-    // Если авторизован, рендерим защищённый компонент
+    // если авторизован, рендерим защищённый компонент
     return children;
 };
 
