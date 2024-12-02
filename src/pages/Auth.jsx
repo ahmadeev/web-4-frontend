@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar.jsx";
 import {useEffect, useState} from "react";
 import SignInForm from "../components/SignInForm.jsx";
 import SignUpForm from "../components/SignUpForm.jsx";
-import styles from "../page-styles/CountDownToVikasBirthday.module.css";
+import styles from "../page-styles/Auth.module.css";
 import {useLocation} from "react-router-dom";
 
 function Auth({ pageTitle, isSignedUp }) {
