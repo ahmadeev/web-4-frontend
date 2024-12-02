@@ -40,8 +40,13 @@ function Modal({ active, setActive, children }) {
     }, [active]);
 
     return (
-        <div className={ active ? `${styles.modal} ${styles.active}` : styles.modal} onClick={ () => setActive( false ) }>
-            <div className={ active ? `${styles.modal_content} ${styles.active}` : styles.modal_content} onClick={ e => e.stopPropagation() }>
+        // active && (
+        //     ...
+        // )
+
+        <div className={active ? `${styles.modal} ${styles.active}` : styles.modal} onClick={() => setActive(false)}>
+            <div className={active ? `${styles.modal_content} ${styles.active}` : styles.modal_content}
+                 onClick={e => e.stopPropagation()}>
                 {children}
             </div>
         </div>
