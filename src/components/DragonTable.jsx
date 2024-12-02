@@ -10,7 +10,7 @@ import {
 } from "../utils/object.model.js";
 import {useAuth} from "./AuthProvider.jsx";
 
-const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
+const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);  // Состояние для данных
@@ -187,4 +187,4 @@ const Table = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     );
 };
 
-export default Table;
+export default DragonTable;

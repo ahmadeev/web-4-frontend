@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import DataTable from "../components/DataTable.jsx";
 import Modal from "../components/Modal.jsx";
 import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
-import Table from "../components/Table.jsx";
+import DragonTable from "../components/DragonTable.jsx";
 import CreateDragon from "../components/CreateDragon.jsx";
 import Alert from "../components/Alert.jsx";
 
@@ -43,8 +43,8 @@ function Home({ pageTitle }) {
                 <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
                 <button onClick={showAlert}>ALERT</button>
 
-                <Table fetchData={crudReadMany} readManyUrl={`${BASE_URL}/dragons`}
-                       deleteOneUrl={`${BASE_URL}/dragon`}/>
+                <DragonTable fetchData={crudReadMany} readManyUrl={`${BASE_URL}/dragons`}
+                             deleteOneUrl={`${BASE_URL}/dragon`}/>
             </div>
 
             <Modal active={createDragonModalActive} setActive={setCreateDragonModalActive}>
