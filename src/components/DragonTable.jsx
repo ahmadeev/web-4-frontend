@@ -8,7 +8,7 @@ import {
     LocationDTO,
     PersonDTO
 } from "../utils/object.model.js";
-import {useAuth} from "./AuthProvider.jsx";
+import {useAuth} from "./utils/AuthProvider.jsx";
 
 const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const { logout } = useAuth();

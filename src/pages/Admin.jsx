@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 import {useEffect} from "react";
 import AdminTable from "../components/AdminTable.jsx";
 

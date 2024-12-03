@@ -1,7 +1,7 @@
-import Timer from "../components/Timer.jsx";
+import Timer from "../components/Timer/Timer.jsx";
 
 import styles from "../page-styles/CountDownToVikasBirthday.module.css";
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 import {useEffect} from "react";
 
 function CountDownToVikasBirthday({ pageTitle }) {

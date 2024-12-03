@@ -1,4 +1,4 @@
-import {useAuth} from "./AuthProvider.jsx";
+import {useAuth} from "../utils/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 

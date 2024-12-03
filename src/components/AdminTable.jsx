@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {crudDelete, crudUpdate} from "../utils/crud.js";
-import {useAuth} from "./AuthProvider.jsx";
+import {useAuth} from "./utils/AuthProvider.jsx";
 
 const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const { logout } = useAuth();

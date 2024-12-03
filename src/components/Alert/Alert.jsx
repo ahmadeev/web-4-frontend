@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from '../component-styles/Alert.module.css'
+import styles from './Alert.module.css'
 
 const Alert = ({ message, isActive, onClose, duration = 3000 }) => {
     useEffect(() => {

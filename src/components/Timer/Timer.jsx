@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import styles from '../component-styles/Timer.module.css'
+import styles from './Timer.module.css'
 
 function Timer({ event, date_of_event_string }) {
     const date_of_event= new Date(date_of_event_string).getTime();

@@ -1,7 +1,7 @@
-import '../component-styles/Navbar.module.css'
-import styles from '../component-styles/Navbar.module.css'
+import './Navbar.module.css'
+import styles from './Navbar.module.css'
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
-import {useAuth} from "./AuthProvider.jsx";
+import {useAuth} from "../utils/AuthProvider.jsx";
 
 function Navbar() {
     const { isAuthenticated, username, logout } = useAuth();

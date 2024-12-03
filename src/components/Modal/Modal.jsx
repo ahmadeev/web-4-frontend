@@ -1,4 +1,4 @@
-import styles from '../component-styles/Modal.module.css'
+import styles from './Modal.module.css'
 import {useEffect} from "react";
 
 function Modal({ active, setActive, children }) {

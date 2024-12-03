@@ -1,4 +1,4 @@
-import styles from '../component-styles/Snow.module.css'
+import styles from './Snow.module.css'
 
 function Snow() {
 

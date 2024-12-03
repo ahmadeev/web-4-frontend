@@ -5,9 +5,9 @@ import {HashRouter, Route, Routes} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import CountDownToNewYear from "./pages/CountDownToNewYear.jsx";
 import CountDownToVikasBirthday from "./pages/CountDownToVikasBirthday.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import Auth from "./pages/Auth.jsx";
-import {AuthProvider, useAuth} from "./components/AuthProvider.jsx";
+import {AuthProvider, useAuth} from "./components/utils/AuthProvider.jsx";
 import Admin from "./pages/Admin.jsx";
 import Forbidden from "./pages/Forbidden.jsx";
 

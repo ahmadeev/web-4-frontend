@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import {UserDTO} from "../utils/user.model.js";
+import {UserDTO} from "../../utils/user.model.js";
 
 const AuthContext = createContext();
 
