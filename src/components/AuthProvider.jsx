@@ -12,7 +12,15 @@ export const AuthProvider = ({ children }) => {
         return savedAuthState === "true";
     });
 
-    const [username, setUsername] = useState(sessionStorage.getItem("session-username"));
+    const [username, setUsername] = useState(() => {
+        const username = sessionStorage.getItem("session-username");
+        return username ? username : "";
+    });
+
+    const [roles, setRoles] = useState(() => {
+        const savedRoles = sessionStorage.getItem("session-roles");
+        return savedRoles ? JSON.parse(savedRoles) : [];
+    });
 
     // метод для входа в систему
     const signIn = (name, password) => {
@@ -34,10 +42,16 @@ export const AuthProvider = ({ children }) => {
                 if (responseData.status === "SUCCESS") {
                     setIsAuthenticated(true);
                     setUsername(name);
+
+                    // костыль, позволяющий не использовать many-to-many на сервере
+                    const roles = [...responseData.data.roles];
+                    if (roles.includes("ADMIN") && !roles.includes("USER")) roles.push("USER")
+                    setRoles(roles);
+
                     sessionStorage.setItem("isAuthenticated", "true");
-                    sessionStorage.setItem("sessionToken", responseData.data.token)
+                    sessionStorage.setItem("session-token", responseData.data.token)
                     sessionStorage.setItem("session-username", name)
-                    console.log("isAuthenticated after login: ", isAuthenticated, "\nexpected: true");
+                    sessionStorage.setItem("session-roles", JSON.stringify(roles));
                 }
                 return responseData;
             })
@@ -65,9 +79,11 @@ export const AuthProvider = ({ children }) => {
         console.log("Logging out...");
         setIsAuthenticated(false);
         setUsername("");
+        setRoles([])
         sessionStorage.setItem("isAuthenticated", "false");
-        sessionStorage.setItem("sessionToken", null)
+        sessionStorage.setItem("session-token", null)
         sessionStorage.setItem("session-username", "")
+        sessionStorage.setItem("session-roles", "[] ")
         console.log("isAuthenticated after logout: ", isAuthenticated, "\nexpected: false");
     };
 
@@ -84,9 +100,11 @@ export const AuthProvider = ({ children }) => {
         return savedAuthState === "true";
     };
 
+    const hasRole = (role) => roles.includes(role);
+
     // значения, которые будут доступны всем компонентам, использующим AuthContext
     return (
-        <AuthContext.Provider value={{ isAuthenticated, username, signIn, signUp, logout, checkAuthStatus }}>
+        <AuthContext.Provider value={{ isAuthenticated, username, roles, hasRole, signIn, signUp, logout, checkAuthStatus }}>
             {children}
         </AuthContext.Provider>
     );

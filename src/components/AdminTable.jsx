@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {crudDelete, crudUpdate} from "../utils/crud.js";
 import {useAuth} from "./AuthProvider.jsx";
 
 const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const { logout } = useAuth();
 
-    const [data, setData] = useState([]);  // состояние для данных
+    const [data, setData] = useState([]);
 
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
@@ -18,18 +18,14 @@ const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             const response = await func(...args);
 
             if (!response.ok) {
-                if (response.status === 401) logout();
+                if (response.status === 401) {
+                    console.log("Ошибка 401 при обновлении AdminTable")
+                    logout();
+                }
                 throw new Error();
             }
 
-            let responseData;
-            try {
-                responseData = await response.json();
-            } catch (error) {
-                console.error("Error reading response body", error);
-            }
-            console.log(responseData)
-            return responseData;
+            return await response.json();
             // раньше setReload(true) был тут
         } catch (error) {
             console.error("Error proccessing CRUD:", error);
@@ -42,15 +38,16 @@ const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     // эмуляция получения данных (или вы можете использовать fetch, axios и т.д.)
     useEffect(() => {
         if (page === 0) document.getElementById("decrease-page").setAttribute("disabled", "")
-        // if (!data || !data.length) document.getElementById("increase-page").setAttribute("disabled", "")
-        // console.log(data, data.length)
 
         const loadData = async () => {
             try {
                 const response = await fetchData(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
 
                 if (!response.ok) {
-                    if (response.status === 401) logout();
+                    if (response.status === 401)  {
+                        console.log("Ошибка 401 при загрузке AdminTable")
+                        logout();
+                    }
                     throw new Error();
                 }
 
@@ -66,13 +63,11 @@ const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
         loadData();
 
-        // setData(loadDataWrapper(fetchData, [page, size]));
-        // setIsLoading(false);
+    }, [fetchData, readManyUrl, page, size, reload]); // пустой -- один раз. data не добавляем, иначе луп
 
-        // console.log(data, data.length)
-        // if (data && data.length) document.getElementById("increase-page").removeAttribute("disabled");
-
-    }, [fetchData, readManyUrl, page, size, reload]); // пустой массив зависимостей — значит, запрос выполняется только один раз при монтировании компонента
+    const handlePageChange = (direction) => {
+        setPage((prevPage) => prevPage + direction);
+    };
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/admin";
 
@@ -123,16 +118,9 @@ const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             </table>
 
             <div>
-                <button id="decrease-page" onClick={async () => {
-                    await setPage(page - 1);
-                }}>left
-                </button>
+                <button id="decrease-page" onClick={() => handlePageChange(-1)} disabled={page === 0}>left</button>
                 <p>{page + 1}</p>
-                <button id="increase-page" onClick={async () => {
-                    await setPage(page + 1);
-                    document.getElementById("decrease-page").removeAttribute("disabled");
-                }}>right
-                </button>
+                <button id="increase-page" onClick={() => handlePageChange(1)}>right</button>
             </div>
         </>
     );

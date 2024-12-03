@@ -13,7 +13,7 @@ import {useAuth} from "./AuthProvider.jsx";
 const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const { logout } = useAuth();
 
-    const [data, setData] = useState([]);  // Состояние для данных
+    const [data, setData] = useState([]);
 
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
@@ -26,7 +26,10 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             const response = await func(...args);
 
             if (!response.ok) {
-                if (response.status === 401) logout();
+                if (response.status === 401)  {
+                    console.log("Ошибка 401 при обновлении DragonTable")
+                    logout();
+                }
                 throw new Error();
             }
 
@@ -49,15 +52,16 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
     useEffect(() => {
         if (page === 0) document.getElementById("decrease-page").setAttribute("disabled", "")
-        // if (!data || !data.length) document.getElementById("increase-page").setAttribute("disabled", "")
-        // console.log(data, data.length)
 
         const loadData = async () => {
             try {
                 const response = await fetchData(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
 
                 if (!response.ok) {
-                    if (response.status === 401) logout();
+                    if (response.status === 401)  {
+                        console.log("Ошибка 401 при загрузке DragonTable")
+                        logout();
+                    }
                     throw new Error();
                 }
 
@@ -73,13 +77,11 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
         loadData();
 
-        // setData(loadDataWrapper(fetchData, [page, size]));
-        // setIsLoading(false);
-
-        // console.log(data, data.length)
-        // if (data && data.length) document.getElementById("increase-page").removeAttribute("disabled");
-
     }, [fetchData, readManyUrl, page, size, reload]); // пустой -- один раз. data не добавляем, иначе луп
+
+    const handlePageChange = (direction) => {
+        setPage((prevPage) => prevPage + direction);
+    };
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -162,7 +164,8 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                         <td>
                             <button onClick={() => {
                                 loadDataWrapper(crudDelete, [deleteOneUrl, item.id])
-                            }}>X
+                            }}>
+                                X
                             </button>
                         </td>
                     </tr>
@@ -171,16 +174,9 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             </table>
 
             <div>
-                <button id="decrease-page" onClick={async () => {
-                    await setPage(page - 1);
-                }}>left
-                </button>
-                <p>{page+1}</p>
-                <button id="increase-page" onClick={async () => {
-                    await setPage(page + 1);
-                    document.getElementById("decrease-page").removeAttribute("disabled");
-                }}>right
-                </button>
+                <button id="decrease-page" onClick={() => handlePageChange(-1)} disabled={page === 0}>left</button>
+                <p>{page + 1}</p>
+                <button id="increase-page" onClick={() => handlePageChange(1)}>right</button>
             </div>
 
         </>

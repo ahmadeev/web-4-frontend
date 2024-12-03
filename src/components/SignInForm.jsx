@@ -34,11 +34,12 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
                     )
                         .then(responseData => {
                             if (responseData.status === "SUCCESS") {
-                                console.log("адрес перед navigate", from)
+                                console.log("Адрес перед navigate", from)
                                 navigate(from, {replace: true});
                             } else {
                                 setResponseError(responseData.details);
                             }
+                            console.log("Успешный вход, SignInForm")
                         })
                 }}>Sign In
                 </button>

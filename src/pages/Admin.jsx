@@ -5,7 +5,7 @@ import AdminTable from "../components/AdminTable.jsx";
 import styles from "../page-styles/Admin.module.css";
 import {crudReadMany} from "../utils/crud.js";
 
-function CountDownToNewYear({ pageTitle }) {
+function Admin({ pageTitle }) {
 
     useEffect(() => {
         document.title = pageTitle;
@@ -25,4 +25,4 @@ function CountDownToNewYear({ pageTitle }) {
     )
 }
 
-export default CountDownToNewYear
+export default Admin

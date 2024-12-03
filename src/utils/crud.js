@@ -4,7 +4,7 @@ export function crudCreate(url, object) {
     return fetch(`${url}`, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(object),
@@ -16,7 +16,7 @@ export function crudRead(url, id) {
     return fetch(`${url}/${id}`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
         },
     })
 }
@@ -26,7 +26,7 @@ export function crudUpdate(url, id, object=null) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
         },
         body: JSON.stringify({object}), // сюда засунуть обновляемый объект
     })
@@ -36,7 +36,7 @@ export function crudDelete(url, id) {
     return fetch(`${url}/${id}`, {
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
         },
     })
 }
@@ -47,7 +47,7 @@ export function crudReadMany(url, page = 0, size = 10) {
     return fetch(`${url}?page=${page}&size=${size}`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
         },
     });
 }
@@ -56,7 +56,7 @@ export function crudDeleteMany(url) {
     return fetch(`${url}`, {
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('sessionToken')}`,
+            'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
         }
     })
 }
