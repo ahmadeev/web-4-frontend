@@ -19,7 +19,7 @@ const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
             if (!response.ok) {
                 if (response.status === 401) {
-                    console.log("Ошибка 401 при обновлении AdminTable")
+                    console.log("401 Error processing table refresh")
                     logout();
                 }
                 throw new Error();
@@ -37,8 +37,6 @@ const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
     // эмуляция получения данных (или вы можете использовать fetch, axios и т.д.)
     useEffect(() => {
-        if (page === 0) document.getElementById("decrease-page").setAttribute("disabled", "")
-
         const loadData = async () => {
             try {
                 const response = await fetchData(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
@@ -120,7 +118,7 @@ const AdminTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             <div>
                 <button id="decrease-page" onClick={() => handlePageChange(-1)} disabled={page === 0}>left</button>
                 <p>{page + 1}</p>
-                <button id="increase-page" onClick={() => handlePageChange(1)}>right</button>
+                <button id="increase-page" onClick={() => handlePageChange(1)} disabled={data.length < 10}>right</button>
             </div>
         </>
     );
