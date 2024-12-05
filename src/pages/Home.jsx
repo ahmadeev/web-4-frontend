@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar/Navbar.jsx";
-import styles from "../page-styles/Check.module.css";
+import styles from "../page-styles/Home.module.css";
 import {useEffect, useState} from "react";
 import Modal from "../components/Modal/Modal.jsx";
 import Alert from "../components/Alert/Alert.jsx";
