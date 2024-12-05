@@ -1,17 +1,16 @@
 import Navbar from "../components/Navbar/Navbar.jsx";
 import styles from "../page-styles/Home.module.css";
 import {useEffect, useState} from "react";
-import DataTable from "../components/DataTable.jsx";
 import Modal from "../components/Modal/Modal.jsx";
 import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
-import DragonTable from "../components/DragonTable.jsx";
-import CreateDragon from "../components/CreateDragon.jsx";
+import ShotTable from "../components/ShotTable.jsx";
+import CreateShot from "../components/CreateShot.jsx";
 import Alert from "../components/Alert/Alert.jsx";
 
 function Home({ pageTitle }) {
 
     const [modalActive, setModalActive] = useState(false);
-    const [createDragonModalActive, setCreateDragonModalActive] = useState(false);
+    const [createShotModalActive, setCreateShotModalActive] = useState(false);
 
     const [alertActive, setAlertActive] = useState(false);
 
@@ -39,23 +38,23 @@ function Home({ pageTitle }) {
                 <p>{SAMPLE_TEXT}</p>
                 <p>{SAMPLE_TEXT}</p>
 
-                <button onClick={() => setCreateDragonModalActive(true)}>CREATE POPUP</button>
+                <button onClick={() => setCreateShotModalActive(true)}>CREATE POPUP</button>
                 <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
                 <button onClick={showAlert}>ALERT</button>
 
-                <DragonTable
+                <ShotTable
                     fetchData={crudReadMany}
-                    readManyUrl={`${BASE_URL}/dragons`}
-                    deleteOneUrl={`${BASE_URL}/dragon`}
+                    readManyUrl={`${BASE_URL}/shots`}
+                    deleteOneUrl={`${BASE_URL}/shot`}
                 />
             </div>
 
-            <Modal active={createDragonModalActive} setActive={setCreateDragonModalActive}>
-                <CreateDragon />
+            <Modal active={createShotModalActive} setActive={setCreateShotModalActive}>
+                <CreateShot />
             </Modal>
 
             <Modal active={modalActive} setActive={setModalActive}>
-                <DataTable/>
+                <p>hello world бубум бам бам</p>
             </Modal>
 
             <Alert

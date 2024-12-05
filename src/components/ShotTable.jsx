@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadMany, crudUpdate} from "../utils/crud.js";
-import {
-    CoordinatesDTO,
-    DragonCaveDTO,
-    DragonDTO,
-    DragonHeadDTO,
-    LocationDTO,
-    PersonDTO
-} from "../utils/object.model.js";
+import {ShotRequestDTO} from "../utils/object.model.js";
 import {useAuth} from "./utils/AuthProvider.jsx";
 
-const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
+const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);
@@ -61,7 +54,7 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
                 if (!response.ok) {
                     if (response.status === 401)  {
-                        console.log("Ошибка 401 при загрузке DragonTable")
+                        console.log("Ошибка 401 при загрузке ShotTable")
                         logout();
                     }
                     throw new Error();
@@ -84,81 +77,56 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
     // Пример создания экземпляра
-    const coordinates = new CoordinatesDTO(50, 30);
-    const cave = new DragonCaveDTO(15);
-    const killer = new PersonDTO("killer", "WHITE", "WHITE", new LocationDTO(1, 1, 1), new Date().toISOString().split('T')[0], 200);
-    const head = new DragonHeadDTO(200, 100500);
-    const dragon = new DragonDTO(
-        "Fire Dragon",
-        coordinates,
-        cave,
-        killer,
-        200,  // Age,
-        "A fierce and powerful dragon", // Description
-        150,  // Wingspan
-        null, // No character
-        head, // Dragon head
+    const shot = new ShotRequestDTO(
+        1,
+        2,
+        3
     );
 
     return (
         <>
             <button onClick={() => {
-                loadDataWrapper(crudCreate, [`${BASE_URL}/dragon`, dragon]);
+                loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot]);
             }}>CREATE</button>
 
             <button onClick={() => {
-                loadDataWrapper(crudDeleteMany, [`${BASE_URL}/dragons`]);
+                loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`]);
             }}>DELETE MANY</button>
 
-            <h1>Таблица данных</h1>
+            <h1>Таблица проверок</h1>
             <table border="1">
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Coordinates</th>
-                    <th>Cave</th>
-                    <th>Killer</th>
-                    <th>Age</th>
-                    <th>Description</th>
-                    <th>Wingspan</th>
-                    <th>Character</th>
-                    <th>Head</th>
-                    <th>Edit</th>
-                    <th>Remove</th>
+                    <th>x</th>
+                    <th>y</th>
+                    <th>r</th>
+                    <th>hit</th>
+                    <th>shot time</th>
+                    <th>script time</th>
+                    <th>REMOVE</th>
                 </tr>
                 </thead>
                 <tbody>
                 {isLoading && (
                     <tr>
-                        <td colSpan="12" style={{textAlign: "center"}}>Загрузка данных...</td>
+                        <td colSpan="8" style={{textAlign: "center"}}>Загрузка данных...</td>
                     </tr>
                 )}
                 {!isLoading && (!data || !data.length) && (
                     <tr>
-                        <td colSpan="12" style={{textAlign: "center"}}>Данные отсутствуют</td>
+                        <td colSpan="8" style={{textAlign: "center"}}>Данные отсутствуют</td>
                     </tr>
                 )}
                 {data && data.map(item => (
                     <tr key={item.id}>
                         <td>{item.id}</td>
-                        <td>{item.name}</td>
-                        <td>{item.coordinates.toString()}</td>
-                        <td>{item.cave.toString()}</td>
-                        <td>{item.killer.toString()}</td>
-                        <td>{item.age}</td>
-                        <td>{item.description}</td>
-                        <td>{item.wingspan}</td>
-                        <td>{item.character}</td>
-                        <td>{item.head.toString()}</td>
-                        <td>
-                            <button onClick={() => {
-                                // crudUpdate(`${BASE_URL}/dragon`, id);
-                                // setReload(true);
-                            }}>
-                                /
-                            </button>
-                        </td>
+                        <td>{item.x}</td>
+                        <td>{item.y}</td>
+                        <td>{item.r}</td>
+                        <td>{item.isHit}</td>
+                        <td>{item.currentTime}</td>
+                        <td>{item.scriptTime}</td>
                         <td>
                             <button onClick={() => {
                                 loadDataWrapper(crudDelete, [deleteOneUrl, item.id])
@@ -181,4 +149,4 @@ const DragonTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     );
 };
 
-export default DragonTable;
+export default ShotTable;

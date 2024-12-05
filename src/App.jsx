@@ -3,7 +3,6 @@ import './App.css'
 import {HashRouter, Route, Routes} from "react-router-dom";
 
 import Home from "./pages/Home.jsx";
-import CountDownToNewYear from "./pages/CountDownToNewYear.jsx";
 import CountDownToVikasBirthday from "./pages/CountDownToVikasBirthday.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import Auth from "./pages/Auth.jsx";
@@ -27,7 +26,6 @@ function App() {
                               <Admin pageTitle="Панель управления" />
                           </ProtectedRoute>
                       } />
-                      <Route path="/ny" element={<CountDownToNewYear pageTitle="Счётчик дней до Нового года" />} />
                       <Route path="/vbd" element={
                           <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["USER"]}>
                               <CountDownToVikasBirthday pageTitle="Счётчик дней до дня рождения Вики" />
@@ -36,9 +34,6 @@ function App() {
                   </Routes>
               </HashRouter>
           </AuthProvider>
-
-
-
       </>
   )
 }

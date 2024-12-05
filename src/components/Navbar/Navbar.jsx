@@ -22,12 +22,11 @@ function Navbar() {
             <nav className={styles.navbar}> {/* можно оставить без className, но в css правило для блока nav */}
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/">home</NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/admin">admin</NavLink>
-                <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/ny">новый год</NavLink>
                 <NavLink className={({isActive}) => isActive ? styles.active : ""} to="/vbd">др вики</NavLink>
 
                 <div style={div_style}>
                     {
-                        (!isAuthenticated || sessionStorage.getItem("sessionToken") === null) &&
+                        (!isAuthenticated || sessionStorage.getItem("session-token") === null) &&
                         <button onClick={() => navigate("/auth")}>
                             Log In
                         </button>
@@ -36,7 +35,7 @@ function Navbar() {
                     }
 
                     {
-                        (isAuthenticated  && sessionStorage.getItem("sessionToken") !== null) &&
+                        (isAuthenticated  && sessionStorage.getItem("session-token") !== null) &&
                         <>
                             <h3>{username}</h3>
                             <button onClick={() => {
