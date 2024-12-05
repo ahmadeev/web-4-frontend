@@ -76,6 +76,12 @@ const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
+    const DIV_STYLE = {
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "0.5rem"
+    }
+
     // Пример создания экземпляра
     const shot = new ShotRequestDTO(
         1,
@@ -93,7 +99,7 @@ const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                 loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`]);
             }}>DELETE MANY</button>
 
-            <h1>Таблица проверок</h1>
+            <h2>Таблица проверок</h2>
             <table border="1">
                 <thead>
                 <tr>
@@ -139,7 +145,7 @@ const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
                 </tbody>
             </table>
 
-            <div>
+            <div style={DIV_STYLE}>
                 <button id="decrease-page" onClick={() => handlePageChange(-1)} disabled={page === 0}>left</button>
                 <p>{page + 1}</p>
                 <button id="increase-page" onClick={() => handlePageChange(1)} disabled={data.length < 10}>right</button>

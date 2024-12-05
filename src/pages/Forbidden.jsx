@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import styles from "../page-styles/Forbidden.module.css";
 
@@ -11,7 +11,11 @@ function Forbidden({ pageTitle }) {
         <>
             <Navbar/>
             <div className={styles.wrapper}>
-                <h1>custom forbidden</h1>
+                <h3>403: Упс, доступ запрещён!</h3>
+                <p>
+                    К сожалению, у вас нет разрешения на просмотр этой страницы. <br/>
+                    Если вы считаете, что это ошибка, свяжитесь с нашей поддержкой.
+                </p>
             </div>
         </>
     )
