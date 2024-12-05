@@ -20,8 +20,9 @@ import {
 import {useAuth} from "../components/utils/AuthProvider.jsx";
 
 function Home({ pageTitle }) {
-    const [isNeedReload, setNeedReload] = useState(false)
     const { logout } = useAuth()
+
+    const [isNeedReload, setNeedReload] = useState(false)
 
     const [modalActive, setModalActive] = useState(false);
     const [createShotModalActive, setCreateShotModalActive] = useState(false);
@@ -108,7 +109,7 @@ function Home({ pageTitle }) {
                     ПРОВЕРКА ПОПАДАНИЯ В ОБЛАСТЬ
                 </h2>
 
-                <div className="main_content">
+                <div className={styles.main_content}>
                     <div className={styles.content_left}>
                         <h2>ГРАФИК</h2>
                         <svg style={svgStyle}></svg>
@@ -119,7 +120,7 @@ function Home({ pageTitle }) {
                             setNeedReload={setNeedReload}
                         />
                     </div>
-                    <div className="content_center">
+                    <div className={styles.content_center}>
                         <ShotTable
                             loadDataWrapper={loadDataWrapper}
                             isNeedReload={isNeedReload}

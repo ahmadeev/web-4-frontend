@@ -14,6 +14,8 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
     const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
+    const [maxPageIncreaseButtonState, setMaxPageIncrease] = useState(true);
+
     const handlePageChange = (direction) => {
         setPage((prevPage) => prevPage + direction);
     };
@@ -62,10 +64,6 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
 
     return (
         <>
-            <button onClick={() => {
-                loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot]);
-            }}>CREATE</button>
-
             <h2>Таблица проверок</h2>
             <table border="1">
                 <thead>
@@ -113,10 +111,61 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
             </table>
 
             <div style={DIV_STYLE}>
-                <button id="decrease-page" onClick={() => handlePageChange(-1)} disabled={page === 0}>left</button>
+                <button id="decrease-page-min" onClick={() => {
+                    setPage(0);
+                    setMaxPageIncrease(true);
+                }} disabled={page === 0}>&lt;&lt;</button>
+                <button id="decrease-page" onClick={() => handlePageChange(-1)} disabled={page === 0}>&lt;</button>
                 <p>{page + 1}</p>
-                <button id="increase-page" onClick={() => handlePageChange(1)} disabled={data.length < 10}>right</button>
+                <button id="increase-page" onClick={() => {
+                    handlePageChange(1);
+                    setMaxPageIncrease(true);
+                }} disabled={data.length < 10}>&gt;</button>
+                <button id="increase-page-max" onClick={() => {
+                    let count;
+                    const loadCount = async () => {
+                        try {
+                            const response = await fetch(`${BASE_URL}/shots-count`, {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
+                                },
+                            });
+
+                            if (!response.ok) {
+                                if (response.status === 401)  {
+                                    console.log("401 Error processing table refresh")
+                                    logout();
+                                }
+                                throw new Error();
+                            }
+
+                            let responseData;
+                            try {
+                                responseData = await response.json();
+                            } catch (error) {
+                                console.error("Error reading response body", error);
+                            }
+                            count = await responseData.data;
+                            handlePageChange(Math.ceil((count - (page + 1) * size) / size));
+                            setMaxPageIncrease(false)
+                            return responseData;
+                            // раньше setReload(true) был тут
+                        } catch (error) {
+                            console.error("Error proccessing CRUD:", error);
+                            return null;
+                        }
+                    }
+
+                    loadCount();
+
+                }} disabled={data.length < 10 || !maxPageIncreaseButtonState}>&gt;&gt;</button>
             </div>
+
+            <button onClick={() => {
+                loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot]);
+            }}>CREATE
+            </button>
 
         </>
     );
