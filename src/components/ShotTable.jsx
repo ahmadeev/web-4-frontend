@@ -3,7 +3,7 @@ import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadMany, crudUpda
 import {ShotRequestDTO} from "../utils/object.model.js";
 import {useAuth} from "./utils/AuthProvider.jsx";
 
-const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
+const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, deleteOneUrl }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);
@@ -17,35 +17,6 @@ const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
     const handlePageChange = (direction) => {
         setPage((prevPage) => prevPage + direction);
     };
-
-    const loadDataWrapper = async (func, args) => {
-        try {
-            const response = await func(...args);
-
-            if (!response.ok) {
-                if (response.status === 401)  {
-                    console.log("401 Error processing table refresh")
-                    logout();
-                }
-                throw new Error();
-            }
-
-            let responseData;
-            try {
-                responseData = await response.json();
-            } catch (error) {
-                console.error("Error reading response body", error);
-            }
-            console.log(responseData)
-            return responseData;
-            // раньше setReload(true) был тут
-        } catch (error) {
-            console.error("Error proccessing CRUD:", error);
-            return null;
-        } finally {
-            setReload(true);
-        }
-    }
 
     useEffect(() => {
         const loadData = async () => {
@@ -70,9 +41,9 @@ const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             }
         };
 
-        loadData();
+        loadData()
 
-    }, [fetchData, readManyUrl, page, size, reload]); // пустой -- один раз. data не добавляем, иначе луп
+    }, [isNeedReload, fetchData, readManyUrl, page, size, reload]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -84,9 +55,9 @@ const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
 
     // Пример создания экземпляра
     const shot = new ShotRequestDTO(
-        1,
+        [1],
         2,
-        3
+        [2]
     );
 
     return (
@@ -94,10 +65,6 @@ const ShotTable = ({ fetchData, readManyUrl, deleteOneUrl }) => {
             <button onClick={() => {
                 loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot]);
             }}>CREATE</button>
-
-            <button onClick={() => {
-                loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`]);
-            }}>DELETE MANY</button>
 
             <h2>Таблица проверок</h2>
             <table border="1">

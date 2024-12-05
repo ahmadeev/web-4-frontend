@@ -17,8 +17,11 @@ import {
     Y_HALF_R,
     Y_MINUS_R
 } from "../utils/drawGraph.js";
+import {useAuth} from "../components/utils/AuthProvider.jsx";
 
 function Home({ pageTitle }) {
+    const [isNeedReload, setNeedReload] = useState(false)
+    const { logout } = useAuth()
 
     const [modalActive, setModalActive] = useState(false);
     const [createShotModalActive, setCreateShotModalActive] = useState(false);
@@ -28,6 +31,35 @@ function Home({ pageTitle }) {
     const showAlert = () => {
         setAlertActive(true);
     };
+
+    const loadDataWrapper = async (func, args) => {
+        try {
+            const response = await func(...args);
+
+            if (!response.ok) {
+                if (response.status === 401)  {
+                    console.log("401 Error processing table refresh")
+                    logout();
+                }
+                throw new Error();
+            }
+
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (error) {
+                console.error("Error reading response body", error);
+            }
+            console.log(responseData)
+            return responseData;
+            // раньше setReload(true) был тут
+        } catch (error) {
+            console.error("Error proccessing CRUD:", error);
+            return null;
+        } finally {
+            setNeedReload(true);
+        }
+    }
 
 
     useEffect(() => {
@@ -82,7 +114,19 @@ function Home({ pageTitle }) {
                         <svg style={svgStyle}></svg>
                     </div>
                     <div className={styles.content_right}>
-                        <CreateShot/>
+                        <CreateShot
+                            loadDataWrapper={loadDataWrapper}
+                            setNeedReload={setNeedReload}
+                        />
+                    </div>
+                    <div className="content_center">
+                        <ShotTable
+                            loadDataWrapper={loadDataWrapper}
+                            isNeedReload={isNeedReload}
+                            fetchData={crudReadMany}
+                            readManyUrl={`${BASE_URL}/shots`}
+                            deleteOneUrl={`${BASE_URL}/shot`}
+                        />
                     </div>
                 </div>
 
@@ -91,11 +135,7 @@ function Home({ pageTitle }) {
                 <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
                 <button onClick={showAlert}>ALERT</button>
 
-                <ShotTable
-                    fetchData={crudReadMany}
-                    readManyUrl={`${BASE_URL}/shots`}
-                    deleteOneUrl={`${BASE_URL}/shot`}
-                />
+
             </div>
 
             <Modal active={createShotModalActive} setActive={setCreateShotModalActive}>

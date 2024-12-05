@@ -1,30 +1,44 @@
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {ShotRequestDTO} from "../utils/object.model.js";
+import {crudCreate, crudDeleteMany} from "../utils/crud.js";
 
-function CreateShot() {
-    const [x, setX] = useState("");
-    const [y, setY] = useState("");
-    const [r, setR] = useState("");
-
+function CreateShot({ loadDataWrapper, setNeedReload }) {
+    const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
     const values = [
         "-2.0", "-1.5", "-1.0",
         "-0.5", "0.0", "0.5",
         "1.0", "1.5", "2.0"
     ]
 
-    const [checkboxes, setCheckboxes] = useState(
+    const [y, setY] = useState("");
+
+    const [xCheckboxes, setXCheckboxes] = useState(
         values.reduce((acc, value) => ({ ...acc, [value]: false }), {})
     );
 
-    const handleXChange = (e) => {
-        setX(e.target.value);
+    const [rCheckboxes, setRCheckboxes] = useState(
+        values.reduce((acc, value) => ({ ...acc, [value]: false }), {})
+    );
+
+    const [submitButtonState, setSubmitButtonState] = useState(false);
+
+    const isCheckboxesValid = (checkboxes) => {
+        return Object.values(checkboxes).includes(true);
     }
+
+    useEffect(() => {
+        setSubmitButtonState(
+            y !== "" &&
+            y.match(/^-?\d+(?:[.,]\d{1,15})?$/) &&
+            parseFloat(y.replace(",", ".")) >= -5 &&
+            parseFloat(y.replace(",", ".")) <= 3 &&
+            isCheckboxesValid(xCheckboxes) &&
+            isCheckboxesValid(rCheckboxes)
+        );
+    }, [xCheckboxes, y, rCheckboxes]);
 
     const handleYChange = (e) => {
         setY(e.target.value);
-    }
-
-    const handleRChange = (e) => {
-        setR(e.target.value);
     }
 
     const handleCheckboxChange = (event, setCheckboxes) => {
@@ -35,15 +49,25 @@ function CreateShot() {
         }));
     };
 
-    const handleCheckboxRequest = () => {
+    const handleCheckboxRequest = (checkboxes) => {
         const result = []
         for(const [k, v] of Object.entries(checkboxes)) {
             if (v === true) {
                 result.push(Number(k));
             }
         }
-        console.log(result);
         return result;
+    }
+
+    const handleRequest = () => {
+        const dto = new ShotRequestDTO(
+            handleCheckboxRequest(xCheckboxes),
+            y,
+            handleCheckboxRequest(rCheckboxes)
+        )
+        crudCreate(`${BASE_URL}/shot`, dto).then(() => {
+            setNeedReload((prev) => !prev);
+        })
     }
 
     return (
@@ -52,14 +76,24 @@ function CreateShot() {
                 <h2>ФОРМА ДЛЯ ТОЧКИ</h2>
                 <div className="form-section">
                     <div className="form-group">
-                        <label>x:</label>
-                        <input
-                            value={x}
-                            onChange={(e) => {
-                                handleXChange(e)
-                            }}
-                            type="text"
-                        /><br/>
+                        <label>x:</label><br/>
+                        {values && values.map((value, index) => (
+                            <>
+                                <label key={index}>
+                                    <input
+                                        type="checkbox"
+                                        name={value}
+                                        checked={xCheckboxes[value]}
+                                        onChange={(e) => {
+                                            handleCheckboxChange(e, setXCheckboxes)
+                                        }}
+                                    />
+                                    {value}
+                                </label>
+                                {(index + 1) % 3 === 0 && <br/>}
+                            </>
+                        ))}
+
                         <label>y:</label>
                         <input
                             value={y}
@@ -69,39 +103,35 @@ function CreateShot() {
                             type="text"
                             placeholder="from -5 to 3"
                         /><br/>
-                        <label>r:</label>
-                        <input
-                            value={r}
-                            onChange={(e) => {
-                                handleRChange(e)
-                            }}
-                            type="text"
-                        /><br/>
 
+                        <label>r:</label><br/>
                         {values && values.map((value, index) => (
                             <>
                                 <label key={index}>
                                     <input
                                         type="checkbox"
                                         name={value}
-                                        checked={checkboxes[value]}
-                                        onChange={handleCheckboxChange}
+                                        checked={rCheckboxes[value]}
+                                        onChange={(e) => {
+                                            handleCheckboxChange(e, setRCheckboxes)
+                                        }}
                                     />
                                     {value}
                                 </label>
                                 {(index + 1) % 3 === 0 && <br/>}
                             </>
                         ))}
-
-                        {handleCheckboxRequest()}
-
-
                     </div>
                 </div>
 
-                <button onClick={() => {
+                <button disabled={(!submitButtonState)} onClick={() => {
                     event.preventDefault();
+                    handleRequest();
                 }}>CREATE
+                </button>
+                <button onClick={() => {
+                    loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`]);
+                }}>RESET
                 </button>
             </form>
         </div>
