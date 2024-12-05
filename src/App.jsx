@@ -2,13 +2,14 @@ import './App.css'
 
 import {HashRouter, Route, Routes} from "react-router-dom";
 
-import Home from "./pages/Home.jsx";
+import Check from "./pages/Check.jsx";
 import CountDownToVikasBirthday from "./pages/CountDownToVikasBirthday.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import Auth from "./pages/Auth.jsx";
 import {AuthProvider, useAuth} from "./components/utils/AuthProvider.jsx";
 import Admin from "./pages/Admin.jsx";
 import Forbidden from "./pages/Forbidden.jsx";
+import Home from "./pages/Home.jsx";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -24,6 +25,11 @@ function App() {
                       <Route path="/admin" element={
                           <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["ADMIN"]}>
                               <Admin pageTitle="Панель управления" />
+                          </ProtectedRoute>
+                      } />
+                      <Route path="/check" element={
+                          <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["USER"]}>
+                              <Check pageTitle="Проверка" />
                           </ProtectedRoute>
                       } />
                       <Route path="/vbd" element={
