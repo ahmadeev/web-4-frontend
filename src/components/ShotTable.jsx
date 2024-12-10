@@ -21,6 +21,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
     };
 
     useEffect(() => {
+        console.log("вот она", isNeedReload)
         const loadData = async () => {
             try {
                 const response = await fetchData(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
@@ -38,7 +39,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
-                setReload(false);
+                //setReload(false);
                 setIsLoading(false);
             }
         };
@@ -120,7 +121,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
                 <button id="increase-page" onClick={() => {
                     handlePageChange(1);
                     setMaxPageIncrease(true);
-                }} disabled={data.length < 10}>&gt;</button>
+                }} disabled={data.length < 10 || !maxPageIncreaseButtonState}>&gt;</button>
                 <button id="increase-page-max" onClick={() => {
                     let count;
                     const loadCount = async () => {

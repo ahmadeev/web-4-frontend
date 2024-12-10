@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {ShotRequestDTO} from "../utils/object.model.js";
 import {crudCreate, crudDeleteMany} from "../utils/crud.js";
 
-function CreateShot({ loadDataWrapper, setNeedReload }) {
+function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, setLastRCheckedParentState, drawDot }) {
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
     const values = [
         "-2.0", "-1.5", "-1.0",
@@ -27,6 +27,13 @@ function CreateShot({ loadDataWrapper, setNeedReload }) {
     }
 
     useEffect(() => {
+        {/* TODO: прикольный костыль. Компонент рендерится без пропса: при одном if все работает, с else и без блока вообще -- перестает */}
+        if (typeof setRCheckboxesParentState === "function") {
+            setRCheckboxesParentState(rCheckboxes);
+        }
+    }, [rCheckboxes]);
+
+    useEffect(() => {
         setSubmitButtonState(
             y !== "" &&
             y.match(/^-?\d+(?:[.,]\d{1,15})?$/) &&
@@ -47,6 +54,7 @@ function CreateShot({ loadDataWrapper, setNeedReload }) {
             ...prev,
             [name]: checked,
         }));
+        setLastRCheckedParentState(name);
     };
 
     const handleCheckboxRequest = (checkboxes) => {
@@ -65,15 +73,21 @@ function CreateShot({ loadDataWrapper, setNeedReload }) {
             y,
             handleCheckboxRequest(rCheckboxes)
         )
-        crudCreate(`${BASE_URL}/shot`, dto).then(() => {
-            setNeedReload((prev) => !prev);
-        })
+
+        loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, dto])
+            .then((res) => {
+                console.log(res);
+                for(let index = 0; index < res.data.length; index++) {
+                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].isHit)
+                }
+
+            });
     }
 
     return (
         <div>
             <form>
-                <h2>ФОРМА ДЛЯ ТОЧКИ</h2>
+                {/*<h2>ФОРМА ДЛЯ ТОЧКИ</h2>*/}
                 <div className="form-section">
                     <div className="form-group">
                         <label>x:</label><br/>

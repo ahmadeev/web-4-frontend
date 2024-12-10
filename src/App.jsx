@@ -27,11 +27,16 @@ function App() {
                               <Admin pageTitle="Панель управления" />
                           </ProtectedRoute>
                       } />
+
                       <Route path="/check" element={
+                          <Check pageTitle="Проверка" />
+                      } />
+
+{/*                      <Route path="/check" element={
                           <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["USER"]}>
                               <Check pageTitle="Проверка" />
                           </ProtectedRoute>
-                      } />
+                      } />*/}
                       <Route path="/vbd" element={
                           <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["USER"]}>
                               <CountDownToVikasBirthday pageTitle="Счётчик дней до дня рождения Вики" />

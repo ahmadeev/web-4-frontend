@@ -29,6 +29,9 @@ function Check({ pageTitle }) {
 
     const [alertActive, setAlertActive] = useState(false);
 
+    const [rFormCheckboxes, setRFormCheckboxes] = useState({});
+    const [lastRChecked, setLastRChecked] = useState("");
+
     const showAlert = () => {
         setAlertActive(true);
     };
@@ -38,11 +41,12 @@ function Check({ pageTitle }) {
             const response = await func(...args);
 
             if (!response.ok) {
+                let message = "Неизвестная ошибка";
                 if (response.status === 401)  {
-                    console.log("401 Error processing table refresh")
+                    message = "401 Error processing table refresh";
                     logout();
                 }
-                throw new Error();
+                throw new Error(message);
             }
 
             let responseData;
@@ -51,17 +55,69 @@ function Check({ pageTitle }) {
             } catch (error) {
                 console.error("Error reading response body", error);
             }
-            console.log(responseData)
             return responseData;
             // раньше setReload(true) был тут
         } catch (error) {
             console.error("Error proccessing CRUD:", error);
             return null;
         } finally {
-            setNeedReload(true);
+            setNeedReload((prev) => !prev);
         }
     }
 
+    const handleSvgClick = (e) => {
+        const svg = document.querySelector("svg");
+        const rect = svg.getBoundingClientRect();
+
+        const svgOffsetTop = rect.top;
+        const svgOffsetLeft = rect.left
+
+        const svgWidth = rect.width;
+        const svgHeight = rect.height;
+
+        const { clientX, clientY } = e;
+
+        const svgClickOffsetTop = clientY - svgOffsetTop;
+        const svgClickOffsetLeft = clientX - svgOffsetLeft;
+
+        const svgX = svgClickOffsetLeft - svgWidth / 2;
+        const svgY = -(svgClickOffsetTop - svgHeight / 2);
+
+        console.log("Смещения:", svgOffsetLeft, svgOffsetTop);
+        console.log("Размеры:", svgWidth, svgHeight);
+        console.log("Координаты клика:", clientX, clientY);
+        console.log("Разница клика:", svgClickOffsetLeft, svgClickOffsetTop);
+        console.log("Новая разница клика:", svgX, svgY);
+
+        console.log(rFormCheckboxes);
+    }
+
+    const drawDot = (x, y, r, isHit) => {
+        const svg = document.querySelector('svg')
+        const CENTER_CONST = svg.getBoundingClientRect().height / 2;
+        const R_CONST = 80
+
+        x += R_CONST * x / r + CENTER_CONST
+        y += -R_CONST * y / r + CENTER_CONST
+
+        console.log(`x: ${x}, y: ${y}, r: ${r}, isHit: ${isHit}`);
+
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        dot.setAttributeNS(null, 'cx', x);
+        dot.setAttributeNS(null, 'cy', y);
+        dot.setAttributeNS(null, 'class', 'target-dot');
+        dot.setAttributeNS(null, 'r', '3');
+
+        let dotColor
+        if (r === parseFloat(lastRChecked)) {
+            dotColor = (isHit ? 'fill: green; stroke: black;' : 'fill: red; stroke: black;')
+        } else {
+            dotColor = 'fill: white; stroke: black;'
+        }
+
+        dot.setAttributeNS(null, 'style', dotColor);
+        svg.appendChild(dot);
+    }
 
     useEffect(() => {
         document.title = pageTitle;
@@ -111,13 +167,19 @@ function Check({ pageTitle }) {
 
                 <div className={styles.main_content}>
                     <div className={styles.content_left}>
-                        <h2>ГРАФИК</h2>
-                        <svg style={svgStyle}></svg>
+                        {/*<h2>ГРАФИК</h2>*/}
+                        <svg
+                            onClick={(e) => {handleSvgClick(e)}}
+                            style={svgStyle}
+                        ></svg>
                     </div>
                     <div className={styles.content_right}>
                         <CreateShot
                             loadDataWrapper={loadDataWrapper}
                             setNeedReload={setNeedReload}
+                            setRCheckboxesParentState={setRFormCheckboxes}
+                            setLastRCheckedParentState={setLastRChecked}
+                            drawDot={drawDot}
                         />
                     </div>
                     <div className={styles.content_center}>

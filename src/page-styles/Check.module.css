@@ -23,6 +23,12 @@
 .content_left {
     width: 50%;
     height: 300px;
+    min-width: 250px;
+    min-height: 250px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .content_right {
