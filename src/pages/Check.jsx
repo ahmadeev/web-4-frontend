@@ -6,17 +6,6 @@ import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMa
 import ShotTable from "../components/ShotTable.jsx";
 import CreateShot from "../components/CreateShot.jsx";
 import Alert from "../components/Alert/Alert.jsx";
-import {
-    R,
-    CENTER,
-    draw_graph,
-    form_path_string,
-    form_polygon_string, X_HALF_R,
-    X_MINUS_HALF_R,
-    X_MINUS_R,
-    Y_HALF_R,
-    Y_MINUS_R
-} from "../utils/drawGraph.js";
 import {useAuth} from "../components/utils/AuthProvider.jsx";
 import {ShotRequestDTO} from "../utils/object.model.js";
 
@@ -152,34 +141,7 @@ function Check({ pageTitle }) {
 
     useEffect(() => {
         document.title = pageTitle;
-
-        const svg = document.querySelector("svg");
-
-        let polygon_points = {
-            2: form_polygon_string([
-                `${CENTER}, ${CENTER}`,
-                `${X_MINUS_R}, ${CENTER}`,
-                `${CENTER}, ${Y_HALF_R}`
-            ]),
-            3: form_polygon_string([
-                `${CENTER}, ${CENTER}`,
-                `${CENTER}, ${Y_MINUS_R}`,
-                `${X_MINUS_HALF_R}, ${Y_MINUS_R}`,
-                `${X_MINUS_HALF_R}, ${CENTER}`,
-            ]),
-        }
-
-        let path_points = {
-            1: form_path_string({
-                "L"     : `${X_HALF_R}, ${CENTER}`,
-                "A"     : `${R / 2}, ${R / 2}`,
-                "ANGLE" : "0",
-                "END"   : `${CENTER}, ${Y_HALF_R}`
-            }),
-        }
-
-        draw_graph(svg, polygon_points, path_points)
-    }, [])
+    }, [pageTitle])
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -199,10 +161,60 @@ function Check({ pageTitle }) {
                 <div className={styles.main_content}>
                     <div className={styles.content_left}>
                         {/*<h2>ГРАФИК</h2>*/}
+
                         <svg
-                            onClick={(e) => {handleSvgClick(e)}}
+                            onClick={(e) => {
+                                handleSvgClick(e)
+                            }}
                             style={svgStyle}
-                        ></svg>
+                        >
+                            <g className="x-grid">
+                                <line stroke="black" x1="0" x2="250" y1="125" y2="125"></line>
+                            </g>
+                            <g className="y-grid">
+                                <line stroke="black" x1="125" x2="125" y1="0" y2="250"></line>
+                            </g>
+
+                            <g className="grid-labels">
+                                <text x="135" y="15">Y</text>
+                                <text x="235" y="105">X</text>
+                            </g>
+
+                            <polygon fill="black" points="125, 0 130, 10 120, 10" stroke="black"></polygon>
+                            <polygon fill="black" points="250, 125 240, 120 240, 130" stroke="black"></polygon>
+
+                            <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                     points="125, 125 125, 165 85, 125"></polygon>
+                            <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                     points="125, 125 125, 45 85, 45 85, 125"></polygon>
+                            <path fill="white" fillOpacity="0.7" stroke="black"
+                                  d="M 125, 125 L 125, 85 A 40, 40 90 0, 1 165, 125"></path>
+
+                            <g className="labels x-labels">
+                                <text x="45" y="115" className="min_R">{lastRChecked ? -lastRChecked : "-R"}</text>
+                                <text x="90" y="115" className="min_half_R">{lastRChecked ? -lastRChecked / 2 : "-R/2"}</text>
+                                <text x="165" y="140" className="half_R">{lastRChecked ? lastRChecked / 2 : "R/2"}</text>
+                                <text x="205" y="140" className="R">{lastRChecked ? lastRChecked : "R"}</text>
+                            </g>
+                            <g className="labels y-labels">
+                                <text x="130" y="205" className="min_R">{lastRChecked ? -lastRChecked : "-R"}</text>
+                                <text x="130" y="165" className="min_half_R">{lastRChecked ? -lastRChecked / 2 : "-R/2"}</text>
+                                <text x="130" y="80" className="half_R">{lastRChecked ? lastRChecked / 2 : "R/2"}</text>
+                                <text x="130" y="40" className="R">{lastRChecked ? lastRChecked : "R"}</text>
+                            </g>
+                            <g className="pridumaupozhe">
+                                <line stroke="black" x1="122" x2="128" y1="205" y2="205"></line>
+                                <line stroke="black" x1="122" x2="128" y1="165" y2="165"></line>
+                                <line stroke="black" x1="122" x2="128" y1="85" y2="85"></line>
+                                <line stroke="black" x1="122" x2="128" y1="45" y2="45"></line>
+
+                                <line stroke="black" y1="122" y2="128" x1="205" x2="205"></line>
+                                <line stroke="black" y1="122" y2="128" x1="165" x2="165"></line>
+                                <line stroke="black" y1="122" y2="128" x1="85" x2="85"></line>
+                                <line stroke="black" y1="122" y2="128" x1="45" x2="45"></line>
+                            </g>
+                        </svg>
+
                     </div>
                     <div className={styles.content_right}>
                         <CreateShot
@@ -233,7 +245,7 @@ function Check({ pageTitle }) {
             </div>
 
             <Modal active={createShotModalActive} setActive={setCreateShotModalActive}>
-                <CreateShot />
+                <CreateShot/>
             </Modal>
 
             <Modal active={modalActive} setActive={setModalActive}>
