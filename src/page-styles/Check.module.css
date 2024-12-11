@@ -17,30 +17,26 @@
 }
 
 .main_content {
-    width: 60%; /* TODO: что-то сделать для красоты ширины */
+    width: 70%; /* TODO: что-то сделать для красоты ширины */
 }
 
-.content_left {
-    width: 50%;
-    height: 300px;
-    min-width: 250px;
-    min-height: 250px;
+/* .left .right */
 
+.content_left, .content_right {
     display: flex;
     align-items: center;
     justify-content: center;
-}
 
-.content_right {
-    float: right;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-width: 300px;
+    min-height: 300px;
 }
 
 .content_left {
     float: left;
+}
+
+.content_right {
+    float: right;
 }
 
 .content_center {
@@ -50,9 +46,47 @@
 
     padding-top: 20px;
     padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+@media (min-width: 1243px) {
+    .content_left, .content_right {
+        width: 50%;
+    }
+}
+
+@media (min-width: 874px) and  (max-width: 1242px) {
+    .main_content {
+        width: 100%;
+    }
+
+    .content_left, .content_right {
+        width: 50%;
+    }
+}
+
+@media (max-width: 873px) {
+    .main_content {
+        width: 90%;
+
+        flex-direction: column;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .content_left, .content_right {
+        width: 100%;
+    }
+
+    .content_center {
+        overflow: auto;
+    }
 }
