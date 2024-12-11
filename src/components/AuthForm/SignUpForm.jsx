@@ -17,7 +17,6 @@ function SignUpForm({ from, setIsSignedUpParentState, setAlertMessageParentState
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const isUsernameValid = checkIsValidUsername(username);
@@ -52,10 +51,6 @@ function SignUpForm({ from, setIsSignedUpParentState, setAlertMessageParentState
         setConfirmPassword(e.target.value);
     };
 
-    const handleIsAdminPropertyChange = (e) => {
-        setIsAdmin(!isAdmin);
-    };
-
     const comparePasswords = (password1, password2) => {
         return password1 && password2 && password1 === password2
     };
@@ -72,14 +67,6 @@ function SignUpForm({ from, setIsSignedUpParentState, setAlertMessageParentState
                         type="text"
                     />
                 </label><br/>
-                <label>
-                    <input
-                        value={isAdmin}
-                        onChange={handleIsAdminPropertyChange}
-                        type="checkbox"
-                    />
-                    Администратор?<br/>
-                </label>
                 <label>
                     Введите пароль:<br/>
                     <input
@@ -119,7 +106,7 @@ function SignUpForm({ from, setIsSignedUpParentState, setAlertMessageParentState
                     signUp(
                         username,
                         password,
-                        isAdmin
+                        false
                     )
                         .then(response => response.json())
                         .then(responseData => {
