@@ -1,7 +1,15 @@
 import Navbar from "../components/Navbar/Navbar.jsx";
 import styles from "../page-styles/Check.module.css";
 import {useEffect, useState} from "react";
-import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
+import {
+    crudCreate,
+    crudRead,
+    crudUpdate,
+    crudDelete,
+    crudReadMany,
+    crudDeleteMany,
+    crudReadAll
+} from "../utils/crud.js";
 import ShotTable from "../components/ShotTable.jsx";
 import CreateShot from "../components/CreateShot.jsx";
 import Alert from "../components/Alert/Alert.jsx";
@@ -55,8 +63,6 @@ function Check({ pageTitle }) {
         } catch (error) {
             console.error("Error proccessing CRUD:", error);
             return null;
-        } finally {
-            setNeedReload((prev) => !prev);
         }
     }
 
@@ -104,6 +110,10 @@ function Check({ pageTitle }) {
         );
 
         loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot])
+            .then((responseData) => {
+                setNeedReload((prev) => (!prev));
+                return responseData;
+            })
             .then((res) => {
                 for(let index = 0; index < res.data.length; index++) {
                     drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRChecked)
@@ -122,6 +132,23 @@ function Check({ pageTitle }) {
         }
     }, [rFormCheckboxes])
 
+    useEffect(() => {
+        console.log(lastRChecked);
+        if (lastRChecked === "") {
+            return () => {
+                document.querySelectorAll('circle').forEach(el => {el.remove()});
+            };
+        }
+        loadDataWrapper(crudReadAll, [`${BASE_URL}/all-shots`])
+            .then((res) => {
+                drawDots(lastRChecked, res.data);
+            })
+
+        return () => {
+            document.querySelectorAll('circle').forEach(el => {el.remove()});
+        };
+    }, [lastRChecked]);
+
     return (
         <>
             <Navbar/>
@@ -133,6 +160,7 @@ function Check({ pageTitle }) {
                 <div className={styles.main_content}>
                     <div className={styles.content_left}>
                         <svg
+                            id="graph"
                             onClick={(e) => {
                                 handleSvgClick(e)
                             }}
@@ -212,6 +240,7 @@ function Check({ pageTitle }) {
                             loadDataWrapper={loadDataWrapper}
                             setNeedReload={setNeedReload}
                             setRCheckboxesParentState={setRFormCheckboxes}
+                            lastRCheckedParentState={lastRChecked}
                             setLastRCheckedParentState={setLastRChecked}
                         />
                     </div>
@@ -219,6 +248,7 @@ function Check({ pageTitle }) {
                         <ShotTable
                             loadDataWrapper={loadDataWrapper}
                             isNeedReload={isNeedReload}
+                            setNeedReload={setNeedReload}
                             readAllUrl={`${BASE_URL}/all-shots`}
                             readManyUrl={`${BASE_URL}/shots`}
                             deleteOneUrl={`${BASE_URL}/shot`}

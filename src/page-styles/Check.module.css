@@ -55,6 +55,11 @@
     justify-content: center;
 }
 
+svg, svg#graph text {
+    cursor: pointer;
+    user-select: none;
+}
+
 @media (min-width: 1243px) {
     .content_left, .content_right {
         width: 50%;

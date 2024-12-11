@@ -1,7 +1,6 @@
 
 export const drawDots = (r, shots) => {
     if (!r || parseFloat(r) === 0) {
-        console.log("нет r или r == 0");
         return;
     }
 
@@ -11,6 +10,10 @@ export const drawDots = (r, shots) => {
 }
 
 export const drawDot = (x, y, r, isHit, lastR) => {
+    if (!r || parseFloat(r) === 0 || !lastR || parseFloat(lastR) === 0) {
+        return;
+    }
+
     const svg = document.querySelector('svg')
     const CENTER_CONST = svg.getBoundingClientRect().height / 2;
     const R_CONST = 80

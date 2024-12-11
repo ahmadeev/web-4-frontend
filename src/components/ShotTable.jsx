@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadAll, crudReadMany, crudUpdate} from "../utils/crud.js";
 import {ShotRequestDTO} from "../utils/object.model.js";
 import {useAuth} from "./utils/AuthProvider.jsx";
-import {drawDots} from "../utils/graph.js";
 
-const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
+const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);
@@ -12,7 +11,6 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, l
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
 
-    const [reload, setReload] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const [maxPageIncreaseButtonState, setMaxPageIncrease] = useState(true);
@@ -36,23 +34,16 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, l
 
                 const responseData = await response.json();
                 setData(responseData.data);
-                // TODO: рисует только страницу
-                drawDots(lastRCheckedParentState, responseData.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
-                //setReload(false);
                 setIsLoading(false);
             }
         };
 
-        loadData()
+        loadData();
 
-        return () => {
-            document.querySelectorAll('circle').forEach(el => {el.remove()})
-        }
-
-    }, [isNeedReload, readManyUrl, page, size, reload, lastRCheckedParentState]); // пустой -- один раз. data не добавляем, иначе луп
+    }, [isNeedReload, readManyUrl, page, size]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -102,12 +93,16 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, l
                         <td>{(item.x).toFixed(3)}</td>
                         <td>{(item.y).toFixed(3)}</td>
                         <td>{item.r}</td>
-                        <td>{item.hit ? "hit" : "miss"}</td>
+                        <td>{item.hit ? <span style={{color: "green", fontWeight: 700}}>hit</span> : <span style={{color: "red", fontWeight: 700}}>miss</span>}</td>
                         <td>{item.currentTime}</td>
                         <td>{item.scriptTime}</td>
                         <td>
                             <button onClick={() => {
                                 loadDataWrapper(crudDelete, [deleteOneUrl, item.id])
+                                    .then((responseData) => {
+                                        setNeedReload((prev) => (!prev));
+                                        return responseData;
+                                    });
                             }}>
                                 X
                             </button>
@@ -122,7 +117,10 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, l
                     setPage(0);
                     setMaxPageIncrease(true);
                 }} disabled={page === 0}>&lt;&lt;</button>
-                <button id="decrease-page" onClick={() => handlePageChange(-1)} disabled={page === 0}>&lt;</button>
+                <button id="decrease-page" onClick={() => {
+                    handlePageChange(-1);
+                    setMaxPageIncrease(true);
+                }} disabled={page === 0}>&lt;</button>
                 <p>{page + 1}</p>
                 <button id="increase-page" onClick={() => {
                     handlePageChange(1);
@@ -157,7 +155,6 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, l
                             handlePageChange(Math.ceil((count - (page + 1) * size) / size));
                             setMaxPageIncrease(false)
                             return responseData;
-                            // раньше setReload(true) был тут
                         } catch (error) {
                             console.error("Error proccessing CRUD:", error);
                             return null;
@@ -170,7 +167,11 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, l
             </div>
 
             <button onClick={() => {
-                loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot]);
+                loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot])
+                    .then((responseData) => {
+                        setNeedReload((prev) => (!prev));
+                        return responseData;
+                    });
             }}>CREATE
             </button>
 

@@ -3,7 +3,7 @@ import {ShotRequestDTO} from "../utils/object.model.js";
 import {crudCreate, crudDeleteMany} from "../utils/crud.js";
 import {drawDot} from "../utils/graph.js";
 
-function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, setLastRCheckedParentState }) {
+function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, lastRCheckedParentState, setLastRCheckedParentState }) {
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
     const values = [
         "-2.0", "-1.5", "-1.0",
@@ -75,12 +75,15 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
         )
 
         loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, dto])
+            .then((responseData) => {
+                setNeedReload((prev) => (!prev));
+                return responseData;
+            })
             .then((res) => {
                 console.log(res);
                 for(let index = 0; index < res.data.length; index++) {
-                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, res.data[index].r)
+                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRCheckedParentState)
                 }
-
             });
     }
 
@@ -127,8 +130,21 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                                         name={value}
                                         checked={rCheckboxes[value]}
                                         onChange={(e) => {
-                                            handleCheckboxChange(e, setRCheckboxes);
-                                            setLastRCheckedParentState(e.target.name);
+                                            handleCheckboxChange(e, setRCheckboxes)
+                                            if (e.target.checked) {
+                                                setLastRCheckedParentState(e.target.name);
+                                            } else {
+                                                let checked = handleCheckboxRequest(rCheckboxes);
+                                                if (checked.length > 0) {
+                                                    for (let i = 0; i < checked.length; i++) {
+                                                        if (checked[i] !== parseFloat(e.target.name)) {
+                                                            setLastRCheckedParentState(checked[i]);
+                                                            return;
+                                                        }
+                                                    }
+                                                }
+                                                setLastRCheckedParentState("");
+                                            }
                                         }}
                                     />
                                     {value}
@@ -145,7 +161,11 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                 }}>CREATE
                 </button>
                 <button onClick={() => {
-                    loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`]);
+                    loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`])
+                        .then((responseData) => {
+                            setNeedReload((prev) => (!prev));
+                            return responseData;
+                        });
                 }}>RESET
                 </button>
             </form>
