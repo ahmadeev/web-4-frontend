@@ -54,7 +54,6 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
             ...prev,
             [name]: checked,
         }));
-        setLastRCheckedParentState(name);
     };
 
     const handleCheckboxRequest = (checkboxes) => {
@@ -127,7 +126,8 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                                         name={value}
                                         checked={rCheckboxes[value]}
                                         onChange={(e) => {
-                                            handleCheckboxChange(e, setRCheckboxes)
+                                            handleCheckboxChange(e, setRCheckboxes);
+                                            setLastRCheckedParentState(e.target.name);
                                         }}
                                     />
                                     {value}

@@ -67,6 +67,12 @@ function Check({ pageTitle }) {
 
     const R_TO_PIXEL = 80;
     const handleSvgClick = (e) => {
+        const checkboxes = handleCheckboxRequest(rFormCheckboxes);
+        if (!(checkboxes.length > 0)) {
+            showAlert();
+            return;
+        }
+
         const svg = document.querySelector("svg");
         const rect = svg.getBoundingClientRect();
 
@@ -99,7 +105,7 @@ function Check({ pageTitle }) {
         const shot = new ShotRequestDTO(
             [x],
             y,
-            handleCheckboxRequest(rFormCheckboxes)
+            checkboxes
         );
 
         loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot])
@@ -254,7 +260,7 @@ function Check({ pageTitle }) {
             </Modal>
 
             <Alert
-                message="This is a custom alert!"
+                message="Для проверки выберите R!"
                 isActive={alertActive}
                 onClose={() => setAlertActive(false)}
             />
