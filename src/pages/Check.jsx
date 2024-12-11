@@ -18,6 +18,7 @@ import {
     Y_MINUS_R
 } from "../utils/drawGraph.js";
 import {useAuth} from "../components/utils/AuthProvider.jsx";
+import {ShotRequestDTO} from "../utils/object.model.js";
 
 function Check({ pageTitle }) {
     const { logout } = useAuth()
@@ -65,6 +66,16 @@ function Check({ pageTitle }) {
         }
     }
 
+    const handleCheckboxRequest = (checkboxes) => {
+        const result = []
+        for(const [k, v] of Object.entries(checkboxes)) {
+            if (v === true) {
+                result.push(Number(k));
+            }
+        }
+        return result;
+    }
+
     const handleSvgClick = (e) => {
         const svg = document.querySelector("svg");
         const rect = svg.getBoundingClientRect();
@@ -83,13 +94,32 @@ function Check({ pageTitle }) {
         const svgX = svgClickOffsetLeft - svgWidth / 2;
         const svgY = -(svgClickOffsetTop - svgHeight / 2);
 
+        const x = svgX / R * lastRChecked;
+        const y = svgY / R * lastRChecked;
+
         console.log("Смещения:", svgOffsetLeft, svgOffsetTop);
         console.log("Размеры:", svgWidth, svgHeight);
         console.log("Координаты клика:", clientX, clientY);
         console.log("Разница клика:", svgClickOffsetLeft, svgClickOffsetTop);
         console.log("Новая разница клика:", svgX, svgY);
+        console.log(`R_CONST: ${R}, last R: ${lastRChecked}`)
+        console.log("Координаты:", x, y)
+        console.log("R:", rFormCheckboxes);
 
-        console.log(rFormCheckboxes);
+        const shot = new ShotRequestDTO(
+            [x],
+            y,
+            handleCheckboxRequest(rFormCheckboxes)
+        );
+
+        loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot])
+            .then((res) => {
+                console.log(res);
+                for(let index = 0; index < res.data.length; index++) {
+                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit)
+                }
+
+            });
     }
 
     const drawDot = (x, y, r, isHit) => {
@@ -108,7 +138,8 @@ function Check({ pageTitle }) {
         dot.setAttributeNS(null, 'class', 'target-dot');
         dot.setAttributeNS(null, 'r', '3');
 
-        let dotColor
+        let dotColor;
+        console.log(`r: ${r}, last r: ${lastRChecked}`);
         if (r === parseFloat(lastRChecked)) {
             dotColor = (isHit ? 'fill: green; stroke: black;' : 'fill: red; stroke: black;')
         } else {

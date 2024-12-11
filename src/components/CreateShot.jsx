@@ -78,7 +78,7 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
             .then((res) => {
                 console.log(res);
                 for(let index = 0; index < res.data.length; index++) {
-                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].isHit)
+                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit)
                 }
 
             });

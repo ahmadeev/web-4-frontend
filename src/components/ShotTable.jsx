@@ -96,7 +96,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
                         <td>{item.x}</td>
                         <td>{item.y}</td>
                         <td>{item.r}</td>
-                        <td>{item.isHit}</td>
+                        <td>{item.hit ? "hit" : "miss"}</td>
                         <td>{item.currentTime}</td>
                         <td>{item.scriptTime}</td>
                         <td>
