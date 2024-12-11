@@ -126,7 +126,6 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
                         .then(response => response.json())
                         .then(responseData => {
                             if (responseData.status === "SUCCESS") {
-                                console.log("адрес перед navigate", from)
                                 navigate("/auth", {replace: true});
                             } else {
                                 setResponseError(responseData.details);

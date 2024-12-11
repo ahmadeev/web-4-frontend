@@ -1,0 +1,8 @@
+        console.log("Смещения:", svgOffsetLeft, svgOffsetTop);
+        console.log("Размеры:", svgWidth, svgHeight);
+        console.log("Координаты клика:", clientX, clientY);
+        console.log("Разница клика:", svgClickOffsetLeft, svgClickOffsetTop);
+        console.log("Новая разница клика:", svgX, svgY);
+        console.log(`R_CONST: ${R_TO_PIXEL}, last R: ${lastRChecked}`)
+        console.log("Координаты:", x, y)
+        console.log("R:", rFormCheckboxes);

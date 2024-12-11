@@ -94,15 +94,6 @@ function Check({ pageTitle }) {
         const x = svgX / R_TO_PIXEL * lastRChecked;
         const y = svgY / R_TO_PIXEL * lastRChecked;
 
-        console.log("Смещения:", svgOffsetLeft, svgOffsetTop);
-        console.log("Размеры:", svgWidth, svgHeight);
-        console.log("Координаты клика:", clientX, clientY);
-        console.log("Разница клика:", svgClickOffsetLeft, svgClickOffsetTop);
-        console.log("Новая разница клика:", svgX, svgY);
-        console.log(`R_CONST: ${R_TO_PIXEL}, last R: ${lastRChecked}`)
-        console.log("Координаты:", x, y)
-        console.log("R:", rFormCheckboxes);
-
         const shot = new ShotRequestDTO(
             [x],
             y,
@@ -147,8 +138,6 @@ function Check({ pageTitle }) {
 
                 <div className={styles.main_content}>
                     <div className={styles.content_left}>
-                        {/*<h2>ГРАФИК</h2>*/}
-
                         <svg
                             onClick={(e) => {
                                 handleSvgClick(e)
@@ -170,24 +159,45 @@ function Check({ pageTitle }) {
                             <polygon fill="black" points="125, 0 130, 10 120, 10" stroke="black"></polygon>
                             <polygon fill="black" points="250, 125 240, 120 240, 130" stroke="black"></polygon>
 
-                            <polygon fill="white" fillOpacity="0.7" stroke="black"
-                                     points="125, 125 125, 165 85, 125"></polygon>
-                            <polygon fill="white" fillOpacity="0.7" stroke="black"
-                                     points="125, 125 125, 45 85, 45 85, 125"></polygon>
-                            <path fill="white" fillOpacity="0.7" stroke="black"
-                                  d="M 125, 125 L 125, 85 A 40, 40 90 0, 1 165, 125"></path>
+                            {lastRChecked >= 0 && (
+                                <>
+                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                             points="125, 125 125, 165 85, 125"></polygon>
+                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                             points="125, 125 125, 45 85, 45 85, 125"></polygon>
+                                    <path fill="white" fillOpacity="0.7" stroke="black"
+                                          d="M 125, 125 L 125, 85 A 40, 40 90 0, 1 165, 125"></path>
+                                </>
+                            )}
+
+                            {lastRChecked < 0 && (
+                                <>
+                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                             points="125,125 125,85 165,125"></polygon>
+                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                             points="125,125 125,205 165,205 165,125"></polygon>
+                                    <path fill="white" fillOpacity="0.7" stroke="black"
+                                          d="M 125,125 L 125,165 A 40,40 90 0,1 85,125"></path>
+                                </>
+                            )}
 
                             <g className="labels x-labels">
-                                <text x="45" y="115" className="min_R">{lastRChecked ? -lastRChecked : "-R"}</text>
-                                <text x="90" y="115" className="min_half_R">{lastRChecked ? -lastRChecked / 2 : "-R/2"}</text>
-                                <text x="165" y="140" className="half_R">{lastRChecked ? lastRChecked / 2 : "R/2"}</text>
-                                <text x="205" y="140" className="R">{lastRChecked ? lastRChecked : "R"}</text>
+                                <text x="45" y="115"
+                                      className="min_R">{lastRChecked ? -Math.abs(lastRChecked) : "-R"}</text>
+                                <text x="90" y="115"
+                                      className="min_half_R">{lastRChecked ? -Math.abs(lastRChecked) / 2 : "-R/2"}</text>
+                                <text x="165" y="140"
+                                      className="half_R">{lastRChecked ? Math.abs(lastRChecked) / 2 : "R/2"}</text>
+                                <text x="205" y="140" className="R">{lastRChecked ? Math.abs(lastRChecked) : "R"}</text>
                             </g>
                             <g className="labels y-labels">
-                                <text x="130" y="205" className="min_R">{lastRChecked ? -lastRChecked : "-R"}</text>
-                                <text x="130" y="165" className="min_half_R">{lastRChecked ? -lastRChecked / 2 : "-R/2"}</text>
-                                <text x="130" y="80" className="half_R">{lastRChecked ? lastRChecked / 2 : "R/2"}</text>
-                                <text x="130" y="40" className="R">{lastRChecked ? lastRChecked : "R"}</text>
+                                <text x="130" y="205"
+                                      className="min_R">{lastRChecked ? -Math.abs(lastRChecked) : "-R"}</text>
+                                <text x="130" y="165"
+                                      className="min_half_R">{lastRChecked ? -Math.abs(lastRChecked) / 2 : "-R/2"}</text>
+                                <text x="130" y="80"
+                                      className="half_R">{lastRChecked ? Math.abs(lastRChecked) / 2 : "R/2"}</text>
+                                <text x="130" y="40" className="R">{lastRChecked ? Math.abs(lastRChecked) : "R"}</text>
                             </g>
                             <g className="pridumaupozhe">
                                 <line stroke="black" x1="122" x2="128" y1="205" y2="205"></line>
@@ -223,21 +233,7 @@ function Check({ pageTitle }) {
                     </div>
                 </div>
 
-
-                <button onClick={() => setCreateShotModalActive(true)}>CREATE POPUP</button>
-                <button onClick={() => setModalActive(true)}>Открыть модальное окно</button>
-                <button onClick={showAlert}>ALERT</button>
-
-
             </div>
-
-            <Modal active={createShotModalActive} setActive={setCreateShotModalActive}>
-                <CreateShot/>
-            </Modal>
-
-            <Modal active={modalActive} setActive={setModalActive}>
-                <p>hello world бубум бам бам</p>
-            </Modal>
 
             <Alert
                 message="Для проверки выберите R!"
