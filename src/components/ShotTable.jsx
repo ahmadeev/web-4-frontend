@@ -93,8 +93,8 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
                 {data && data.map(item => (
                     <tr key={item.id}>
                         <td>{item.id}</td>
-                        <td>{item.x}</td>
-                        <td>{item.y}</td>
+                        <td>{(item.x).toFixed(3)}</td>
+                        <td>{(item.y).toFixed(3)}</td>
                         <td>{item.r}</td>
                         <td>{item.hit ? "hit" : "miss"}</td>
                         <td>{item.currentTime}</td>
