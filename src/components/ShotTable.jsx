@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadMany, crudUpdate} from "../utils/crud.js";
+import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadAll, crudReadMany, crudUpdate} from "../utils/crud.js";
 import {ShotRequestDTO} from "../utils/object.model.js";
 import {useAuth} from "./utils/AuthProvider.jsx";
 import {drawDots} from "../utils/graph.js";
@@ -36,7 +36,6 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
                 }
 
                 const responseData = await response.json();
-                console.log(responseData);
                 setData(responseData.data);
                 drawDots(lastRCheckedParentState, responseData.data);
             } catch (error) {

@@ -43,6 +43,15 @@ export function crudDelete(url, id) {
 
 //--------------------many
 
+export function crudReadAll(url) {
+    return fetch(`${url}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('session-token')}`,
+        },
+    });
+}
+
 export function crudReadMany(url, page = 0, size = 10) {
     return fetch(`${url}?page=${page}&size=${size}`, {
         method: 'GET',
