@@ -1,10 +1,8 @@
 import {useAuth} from "../utils/AuthProvider.jsx";
-import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
 function SignUpForm({ from, setIsSignedUpParentState, setAlertMessageParentState }) {
     const { signUp } = useAuth();
-    const navigate = useNavigate();
 
     // ошибки, пришедшие в ответе с сервера
     const [responseError, setResponseError] = useState("");
