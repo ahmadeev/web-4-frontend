@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {ShotRequestDTO} from "../utils/object.model.js";
 import {crudCreate, crudDeleteMany} from "../utils/crud.js";
+import {drawDot} from "../utils/graph.js";
 
-function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, setLastRCheckedParentState, drawDot }) {
+function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, setLastRCheckedParentState }) {
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
     const values = [
         "-2.0", "-1.5", "-1.0",
@@ -77,7 +78,7 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
             .then((res) => {
                 console.log(res);
                 for(let index = 0; index < res.data.length; index++) {
-                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit)
+                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, res.data[index].r)
                 }
 
             });

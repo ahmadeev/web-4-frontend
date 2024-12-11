@@ -8,6 +8,7 @@ import CreateShot from "../components/CreateShot.jsx";
 import Alert from "../components/Alert/Alert.jsx";
 import {useAuth} from "../components/utils/AuthProvider.jsx";
 import {ShotRequestDTO} from "../utils/object.model.js";
+import {drawDot, drawDots} from "../utils/graph.js";
 
 function Check({ pageTitle }) {
     const { logout } = useAuth()
@@ -112,43 +113,22 @@ function Check({ pageTitle }) {
             .then((res) => {
                 console.log(res);
                 for(let index = 0; index < res.data.length; index++) {
-                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit)
+                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRChecked)
                 }
 
             });
     }
 
-    const drawDot = (x, y, r, isHit) => {
-        const svg = document.querySelector('svg')
-        const CENTER_CONST = svg.getBoundingClientRect().height / 2;
-        const R_CONST = 80
-
-        x += R_CONST * x / r + CENTER_CONST
-        y += -R_CONST * y / r + CENTER_CONST
-
-        console.log(`x: ${x}, y: ${y}, r: ${r}, isHit: ${isHit}`);
-
-        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-        dot.setAttributeNS(null, 'cx', x);
-        dot.setAttributeNS(null, 'cy', y);
-        dot.setAttributeNS(null, 'class', 'target-dot');
-        dot.setAttributeNS(null, 'r', '3');
-
-        let dotColor;
-        console.log(`r: ${r}, last r: ${lastRChecked}`);
-        if (r === parseFloat(lastRChecked)) {
-            dotColor = (isHit ? 'fill: green; stroke: black;' : 'fill: red; stroke: black;')
-        } else {
-            dotColor = 'fill: white; stroke: black;'
-        }
-
-        dot.setAttributeNS(null, 'style', dotColor);
-        svg.appendChild(dot);
-    }
-
     useEffect(() => {
         document.title = pageTitle;
     }, [pageTitle])
+
+    // отмена выбора R
+    useEffect(() => {
+        if (!(handleCheckboxRequest(rFormCheckboxes).length > 0)) {
+            setLastRChecked("");
+        }
+    }, [rFormCheckboxes])
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -229,7 +209,6 @@ function Check({ pageTitle }) {
                             setNeedReload={setNeedReload}
                             setRCheckboxesParentState={setRFormCheckboxes}
                             setLastRCheckedParentState={setLastRChecked}
-                            drawDot={drawDot}
                         />
                     </div>
                     <div className={styles.content_center}>
@@ -239,6 +218,7 @@ function Check({ pageTitle }) {
                             fetchData={crudReadMany}
                             readManyUrl={`${BASE_URL}/shots`}
                             deleteOneUrl={`${BASE_URL}/shot`}
+                            lastRCheckedParentState={lastRChecked}
                         />
                     </div>
                 </div>

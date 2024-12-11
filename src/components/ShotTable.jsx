@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadMany, crudUpdate} from "../utils/crud.js";
 import {ShotRequestDTO} from "../utils/object.model.js";
 import {useAuth} from "./utils/AuthProvider.jsx";
+import {drawDots} from "../utils/graph.js";
 
-const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, deleteOneUrl }) => {
+const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);
@@ -35,7 +36,9 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
                 }
 
                 const responseData = await response.json();
+                console.log(responseData);
                 setData(responseData.data);
+                drawDots(lastRCheckedParentState, responseData.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
@@ -46,7 +49,11 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
 
         loadData()
 
-    }, [isNeedReload, fetchData, readManyUrl, page, size, reload]); // пустой -- один раз. data не добавляем, иначе луп
+        return () => {
+            document.querySelectorAll('circle').forEach(el => {el.remove()})
+        }
+
+    }, [isNeedReload, fetchData, readManyUrl, page, size, reload, lastRCheckedParentState]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
