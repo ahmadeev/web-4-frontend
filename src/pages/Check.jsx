@@ -15,9 +15,6 @@ function Check({ pageTitle }) {
 
     const [isNeedReload, setNeedReload] = useState(false)
 
-    const [modalActive, setModalActive] = useState(false);
-    const [createShotModalActive, setCreateShotModalActive] = useState(false);
-
     const [alertActive, setAlertActive] = useState(false);
 
     const [rFormCheckboxes, setRFormCheckboxes] = useState({});

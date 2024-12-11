@@ -2,7 +2,7 @@ import {useAuth} from "../utils/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
+function SignUpForm({ from, setIsSignedUpParentState, setAlertMessageParentState }) {
     const { signUp } = useAuth();
     const navigate = useNavigate();
 
@@ -126,7 +126,8 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
                         .then(response => response.json())
                         .then(responseData => {
                             if (responseData.status === "SUCCESS") {
-                                navigate("/auth", {replace: true});
+                                setAlertMessageParentState("Успешная регистрация!");
+                                setIsSignedUpParentState((prev) => (!prev));
                             } else {
                                 setResponseError(responseData.details);
                             }
@@ -137,8 +138,8 @@ function SignUpForm({ from, isSignedUp, setIsSignedUp }) {
             </form>
             <br/>
             <a onClick={() => {
-                setIsSignedUp(!isSignedUp);
-            }}>{isSignedUp ? "Sign Up" : "Sign In"}</a>
+                setIsSignedUpParentState((prev) => (!prev));
+            }}>Sign In</a>
         </div>
     )
 }

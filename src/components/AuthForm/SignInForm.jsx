@@ -2,7 +2,7 @@ import {useAuth} from "../utils/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-function SignInForm({ from, isSignedUp, setIsSignedUp }) {
+function SignInForm({ from, setIsSignedUpParentState, setAlertMessageParentState }) {
     const { signIn } = useAuth();
     const navigate = useNavigate();
 
@@ -81,19 +81,22 @@ function SignInForm({ from, isSignedUp, setIsSignedUp }) {
                     )
                         .then(responseData => {
                             if (responseData.status === "SUCCESS") {
-                                navigate(from, {replace: true});
+                                // TODO: вынести алерт для логина повыше, чтоб не делать таймаут
+                                setAlertMessageParentState("Успешный вход!")
+                                setTimeout(() => {
+                                    navigate(from, {replace: true})
+                                }, 1500)
                             } else {
                                 setResponseError(responseData.details);
                             }
-                            console.log("Успешный вход, SignInForm")
                         })
                 }}>Sign In
                 </button>
             </form>
             <br/>
             <a onClick={() => {
-                setIsSignedUp(!isSignedUp);
-            }}>{isSignedUp ? "Sign Up" : "Sign In"}</a>
+                setIsSignedUpParentState((prev) => (!prev));
+            }}>Sign Up</a>
         </div>
     )
 }
