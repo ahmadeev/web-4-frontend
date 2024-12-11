@@ -3,12 +3,9 @@ import './App.css'
 import {HashRouter, Route, Routes} from "react-router-dom";
 
 import Check from "./pages/Check.jsx";
-import CountDownToVikasBirthday from "./pages/CountDownToVikasBirthday.jsx";
 import ProtectedRoute from "./components/utils/ProtectedRoute.jsx";
 import Auth from "./pages/Auth.jsx";
 import {AuthProvider, useAuth} from "./components/utils/AuthProvider.jsx";
-import Admin from "./pages/Admin.jsx";
-import Forbidden from "./pages/Forbidden.jsx";
 import Home from "./pages/Home.jsx";
 
 function App() {
@@ -20,13 +17,7 @@ function App() {
               <HashRouter>
                   <Routes>
                       <Route path="/" element={<Home pageTitle="Домашняя" />} />
-                      <Route path="/forbidden" element={<Forbidden pageTitle="Доступ запрещен" />} />
                       <Route path="/auth" element={<Auth pageTitle="Войти" isSignedUp={true} />} />
-                      <Route path="/admin" element={
-                          <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["ADMIN"]}>
-                              <Admin pageTitle="Панель управления" />
-                          </ProtectedRoute>
-                      } />
 
                       <Route path="/check" element={
                           <Check pageTitle="Проверка" />
@@ -37,11 +28,6 @@ function App() {
                               <Check pageTitle="Проверка" />
                           </ProtectedRoute>
                       } />*/}
-                      <Route path="/vbd" element={
-                          <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["USER"]}>
-                              <CountDownToVikasBirthday pageTitle="Счётчик дней до дня рождения Вики" />
-                          </ProtectedRoute>
-                      } />
                   </Routes>
               </HashRouter>
           </AuthProvider>

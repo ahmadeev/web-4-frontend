@@ -4,7 +4,7 @@ import {ShotRequestDTO} from "../utils/object.model.js";
 import {useAuth} from "./utils/AuthProvider.jsx";
 import {drawDots} from "../utils/graph.js";
 
-const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
+const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);
@@ -22,10 +22,9 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
     };
 
     useEffect(() => {
-        console.log("вот она", isNeedReload)
         const loadData = async () => {
             try {
-                const response = await fetchData(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
+                const response = await crudReadMany(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
 
                 if (!response.ok) {
                     if (response.status === 401)  {
@@ -37,6 +36,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
 
                 const responseData = await response.json();
                 setData(responseData.data);
+                // TODO: рисует только страницу
                 drawDots(lastRCheckedParentState, responseData.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -52,7 +52,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, fetchData, readManyUrl, dele
             document.querySelectorAll('circle').forEach(el => {el.remove()})
         }
 
-    }, [isNeedReload, fetchData, readManyUrl, page, size, reload, lastRCheckedParentState]); // пустой -- один раз. data не добавляем, иначе луп
+    }, [isNeedReload, readManyUrl, page, size, reload, lastRCheckedParentState]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 

@@ -1,7 +1,6 @@
 import Navbar from "../components/Navbar/Navbar.jsx";
 import styles from "../page-styles/Check.module.css";
 import {useEffect, useState} from "react";
-import Modal from "../components/Modal/Modal.jsx";
 import {crudCreate, crudRead, crudUpdate, crudDelete, crudReadMany, crudDeleteMany} from "../utils/crud.js";
 import ShotTable from "../components/ShotTable.jsx";
 import CreateShot from "../components/CreateShot.jsx";
@@ -19,6 +18,14 @@ function Check({ pageTitle }) {
 
     const [rFormCheckboxes, setRFormCheckboxes] = useState({});
     const [lastRChecked, setLastRChecked] = useState("");
+
+    const R_TO_PIXEL = 80;
+    const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
+
+    const svgStyle = {
+        height: "250px",
+        width: "250px",
+    }
 
     const showAlert = () => {
         setAlertActive(true);
@@ -63,7 +70,6 @@ function Check({ pageTitle }) {
         return result;
     }
 
-    const R_TO_PIXEL = 80;
     const handleSvgClick = (e) => {
         const checkboxes = handleCheckboxRequest(rFormCheckboxes);
         if (!(checkboxes.length > 0)) {
@@ -74,16 +80,16 @@ function Check({ pageTitle }) {
         const svg = document.querySelector("svg");
         const rect = svg.getBoundingClientRect();
 
-        const svgOffsetTop = rect.top;
         const svgOffsetLeft = rect.left
+        const svgOffsetTop = rect.top;
 
         const svgWidth = rect.width;
         const svgHeight = rect.height;
 
         const { clientX, clientY } = e;
 
-        const svgClickOffsetTop = clientY - svgOffsetTop;
         const svgClickOffsetLeft = clientX - svgOffsetLeft;
+        const svgClickOffsetTop = clientY - svgOffsetTop;
 
         const svgX = svgClickOffsetLeft - svgWidth / 2;
         const svgY = -(svgClickOffsetTop - svgHeight / 2);
@@ -99,11 +105,9 @@ function Check({ pageTitle }) {
 
         loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot])
             .then((res) => {
-                console.log(res);
                 for(let index = 0; index < res.data.length; index++) {
                     drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRChecked)
                 }
-
             });
     }
 
@@ -117,13 +121,6 @@ function Check({ pageTitle }) {
             setLastRChecked("");
         }
     }, [rFormCheckboxes])
-
-    const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
-
-    const svgStyle = {
-        height: "250px",
-        width: "250px",
-    }
 
     return (
         <>
@@ -222,7 +219,7 @@ function Check({ pageTitle }) {
                         <ShotTable
                             loadDataWrapper={loadDataWrapper}
                             isNeedReload={isNeedReload}
-                            fetchData={crudReadMany}
+                            readAllUrl={`${BASE_URL}/all-shots`}
                             readManyUrl={`${BASE_URL}/shots`}
                             deleteOneUrl={`${BASE_URL}/shot`}
                             lastRCheckedParentState={lastRChecked}
