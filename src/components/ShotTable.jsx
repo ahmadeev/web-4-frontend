@@ -71,7 +71,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, readManyUrl, deleteOneUrl, l
 
     return (
         <>
-            <h2>Таблица проверок</h2>
+            <h2>ТАБЛИЦА ПРОВЕРОК</h2>
             <table border="1">
                 <thead>
                 <tr>

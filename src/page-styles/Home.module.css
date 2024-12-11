@@ -16,6 +16,10 @@
     margin-top: 10vh;           /* для фиксированного navbar */
 }
 
+p.article {
+    text-align: left;
+}
+
 @media (min-width: 1243px) {
 
 }
