@@ -65,6 +65,7 @@ function Check({ pageTitle }) {
         return result;
     }
 
+    const R_TO_PIXEL = 80;
     const handleSvgClick = (e) => {
         const svg = document.querySelector("svg");
         const rect = svg.getBoundingClientRect();
@@ -83,15 +84,15 @@ function Check({ pageTitle }) {
         const svgX = svgClickOffsetLeft - svgWidth / 2;
         const svgY = -(svgClickOffsetTop - svgHeight / 2);
 
-        const x = svgX / R * lastRChecked;
-        const y = svgY / R * lastRChecked;
+        const x = svgX / R_TO_PIXEL * lastRChecked;
+        const y = svgY / R_TO_PIXEL * lastRChecked;
 
         console.log("Смещения:", svgOffsetLeft, svgOffsetTop);
         console.log("Размеры:", svgWidth, svgHeight);
         console.log("Координаты клика:", clientX, clientY);
         console.log("Разница клика:", svgClickOffsetLeft, svgClickOffsetTop);
         console.log("Новая разница клика:", svgX, svgY);
-        console.log(`R_CONST: ${R}, last R: ${lastRChecked}`)
+        console.log(`R_CONST: ${R_TO_PIXEL}, last R: ${lastRChecked}`)
         console.log("Координаты:", x, y)
         console.log("R:", rFormCheckboxes);
 
