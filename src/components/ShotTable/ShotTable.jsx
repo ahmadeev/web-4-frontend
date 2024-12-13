@@ -3,6 +3,7 @@ import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadAll, crudReadM
 import {ShotRequestDTO} from "../../utils/object.model.js";
 import {useAuth} from "../utils/AuthProvider.jsx";
 import "./ShotTable.module.css"
+import styles from "../../page-styles/Check.module.css";
 
 const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
     const { logout } = useAuth();
@@ -64,54 +65,63 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
     return (
         <>
             <h2>ТАБЛИЦА ПРОВЕРОК</h2>
-            <table border="1">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>x</th>
-                    <th>y</th>
-                    <th>r</th>
-                    <th>hit</th>
-                    <th>shot time</th>
-                    <th>script time</th>
-                    <th>REMOVE</th>
-                </tr>
-                </thead>
-                <tbody>
-                {isLoading && (
+            <div style={{
+                maxWidth: "100%",
+                display: "flex",
+                alignItems: "center",
+                overflowX: "auto"
+            }}>
+                <table border="1">
+                    <thead>
                     <tr>
-                        <td colSpan="8" style={{textAlign: "center"}}>Загрузка данных...</td>
+                        <th>ID</th>
+                        <th>x</th>
+                        <th>y</th>
+                        <th>r</th>
+                        <th>hit</th>
+                        <th>shot time</th>
+                        <th>script time</th>
+                        <th>REMOVE</th>
                     </tr>
-                )}
-                {!isLoading && (!data || !data.length) && (
-                    <tr>
-                        <td colSpan="8" style={{textAlign: "center"}}>Данные отсутствуют</td>
-                    </tr>
-                )}
-                {data && data.map(item => (
-                    <tr key={item.id}>
-                        <td>{item.id}</td>
-                        <td>{(item.x).toFixed(3)}</td>
-                        <td>{(item.y).toFixed(3)}</td>
-                        <td>{item.r}</td>
-                        <td>{item.hit ? <span style={{color: "green", fontWeight: 700}}>hit</span> : <span style={{color: "red", fontWeight: 700}}>miss</span>}</td>
-                        <td>{item.currentTime}</td>
-                        <td>{item.scriptTime}</td>
-                        <td>
-                            <button onClick={() => {
-                                loadDataWrapper(crudDelete, [deleteOneUrl, item.id])
-                                    .then((responseData) => {
-                                        setNeedReload((prev) => (!prev));
-                                        return responseData;
-                                    });
-                            }}>
-                                X
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {isLoading && (
+                        <tr>
+                            <td colSpan="8" style={{textAlign: "center"}}>Загрузка данных...</td>
+                        </tr>
+                    )}
+                    {!isLoading && (!data || !data.length) && (
+                        <tr>
+                            <td colSpan="8" style={{textAlign: "center"}}>Данные отсутствуют</td>
+                        </tr>
+                    )}
+                    {data && data.map(item => (
+                        <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{(item.x).toFixed(3)}</td>
+                            <td>{(item.y).toFixed(3)}</td>
+                            <td>{item.r}</td>
+                            <td>{item.hit ? <span style={{color: "green", fontWeight: 700}}>hit</span> :
+                                <span style={{color: "red", fontWeight: 700}}>miss</span>}</td>
+                            <td>{item.currentTime}</td>
+                            <td>{item.scriptTime}</td>
+                            <td>
+                                <button onClick={() => {
+                                    loadDataWrapper(crudDelete, [deleteOneUrl, item.id])
+                                        .then((responseData) => {
+                                            setNeedReload((prev) => (!prev));
+                                            return responseData;
+                                        });
+                                }}>
+                                    X
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+
 
             <div style={DIV_STYLE}>
                 <button id="decrease-page-min" onClick={() => {
@@ -139,7 +149,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
                             });
 
                             if (!response.ok) {
-                                if (response.status === 401)  {
+                                if (response.status === 401) {
                                     console.log("401 Error processing table refresh")
                                     logout();
                                 }

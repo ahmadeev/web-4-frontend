@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar/Navbar.jsx";
 import styles from "../page-styles/Check.module.css";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     crudCreate,
     crudRead,
@@ -253,7 +253,6 @@ function Check({ pageTitle }) {
                             />
                         </div>
                     </div>
-
 
                     <div className={styles.content_bottom_center}>
                         <div className={styles.content_center}>
