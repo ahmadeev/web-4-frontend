@@ -255,16 +255,18 @@ function Check({ pageTitle }) {
                     </div>
 
 
-                    <div className={styles.content_center}>
-                        <ShotTable
-                            loadDataWrapper={loadDataWrapper}
-                            isNeedReload={isNeedReload}
-                            setNeedReload={setNeedReload}
-                            readAllUrl={`${BASE_URL}/all-shots`}
-                            readManyUrl={`${BASE_URL}/shots`}
-                            deleteOneUrl={`${BASE_URL}/shot`}
-                            lastRCheckedParentState={lastRChecked}
-                        />
+                    <div className={styles.content_bottom_center}>
+                        <div className={styles.content_center}>
+                            <ShotTable
+                                loadDataWrapper={loadDataWrapper}
+                                isNeedReload={isNeedReload}
+                                setNeedReload={setNeedReload}
+                                readAllUrl={`${BASE_URL}/all-shots`}
+                                readManyUrl={`${BASE_URL}/shots`}
+                                deleteOneUrl={`${BASE_URL}/shot`}
+                                lastRCheckedParentState={lastRChecked}
+                            />
+                        </div>
                     </div>
                 </div>
 

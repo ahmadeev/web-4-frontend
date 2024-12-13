@@ -18,9 +18,19 @@
 
 .main_content {
     width: 70%; /* TODO: что-то сделать для красоты ширины */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 /* .left .right */
+
+.content_top_center {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    /*margin-bottom: 10px;*/
+}
 
 .content_left, .content_right {
     display: flex;
@@ -29,6 +39,11 @@
 
     min-width: 300px;
     min-height: 300px;
+
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .content_left {
@@ -39,20 +54,24 @@
     float: right;
 }
 
-.content_center {
+.content_bottom_center {
     width: 100%;
     height: auto;
     clear: both;
-
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.content_center {
+
 }
 
 svg, svg#graph text {
@@ -62,7 +81,6 @@ svg, svg#graph text {
 
 @media (min-width: 1243px) {
     .content_top_center {
-        display: flex;
         align-items: stretch;
     }
 
@@ -71,24 +89,29 @@ svg, svg#graph text {
     }
 }
 
-@media (min-width: 874px) and  (max-width: 1242px) {
+/* интересное наблюдение: важно включать пересечения для плавного изменения без скачков */
+@media (min-width: 874px) and  (max-width: 1243px) {
+    .main_content {
+        width: 70%;
+    }
+
     .content_top_center {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: stretch;
         justify-content: center;
-    }
-
-    .main_content {
-        width: 70%;
     }
 
     .content_left, .content_right {
         width: 50%;
     }
+
+    .content-bottom-center {
+        justify-content: stretch;
+    }
 }
 
-@media (max-width: 873px) {
+@media (max-width: 874px) {
     .main_content {
         width: 90%;
 
@@ -99,11 +122,18 @@ svg, svg#graph text {
         justify-content: center;
     }
 
+    .content_top_center {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+    }
+
     .content_left, .content_right {
         width: 100%;
     }
 
-    .content_center {
-        overflow: auto;
+    .content_bottom_center {
+        overflow-x: scroll;
     }
 }
