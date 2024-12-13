@@ -61,14 +61,26 @@ svg, svg#graph text {
 }
 
 @media (min-width: 1243px) {
+    .content_top_center {
+        display: flex;
+        align-items: stretch;
+    }
+
     .content_left, .content_right {
         width: 50%;
     }
 }
 
 @media (min-width: 874px) and  (max-width: 1242px) {
+    .content_top_center {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
     .main_content {
-        width: 100%;
+        width: 70%;
     }
 
     .content_left, .content_right {

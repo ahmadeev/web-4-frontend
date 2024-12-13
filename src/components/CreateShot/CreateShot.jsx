@@ -91,7 +91,7 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
     return (
         <form style={{
             textAlign: "left",
-            width: "60%",
+            // width: "60%",
             paddingLeft: "30px",
             paddingRight: "30px",
             boxSizing: "border-box"

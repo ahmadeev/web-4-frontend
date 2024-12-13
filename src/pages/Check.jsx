@@ -158,96 +158,103 @@ function Check({ pageTitle }) {
                 </h2>
 
                 <div className={styles.main_content}>
-                    <div className={styles.content_left}>
-                        <svg
-                            id="graph"
-                            onClick={(e) => {
-                                handleSvgClick(e)
-                            }}
-                            style={svgStyle}
-                        >
-                            <g className="x-grid">
-                                <line stroke="black" x1="0" x2="250" y1="125" y2="125"></line>
-                            </g>
-                            <g className="y-grid">
-                                <line stroke="black" x1="125" x2="125" y1="0" y2="250"></line>
-                            </g>
 
-                            <g className="grid-labels">
-                                <text x="135" y="15">Y</text>
-                                <text x="235" y="105">X</text>
-                            </g>
+                    <div className={styles.content_top_center}>
+                        <div className={styles.content_left}>
+                            <svg
+                                id="graph"
+                                onClick={(e) => {
+                                    handleSvgClick(e)
+                                }}
+                                style={svgStyle}
+                            >
+                                <g className="x-grid">
+                                    <line stroke="black" x1="0" x2="250" y1="125" y2="125"></line>
+                                </g>
+                                <g className="y-grid">
+                                    <line stroke="black" x1="125" x2="125" y1="0" y2="250"></line>
+                                </g>
 
-                            <polygon fill="black" points="125, 0 130, 10 120, 10" stroke="black"></polygon>
-                            <polygon fill="black" points="250, 125 240, 120 240, 130" stroke="black"></polygon>
+                                <g className="grid-labels">
+                                    <text x="135" y="15">Y</text>
+                                    <text x="235" y="105">X</text>
+                                </g>
 
-                            {lastRChecked > 0 && (
-                                <>
-                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
-                                             points="125, 125 125, 165 85, 125"></polygon>
-                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
-                                             points="125, 125 125, 45 85, 45 85, 125"></polygon>
-                                    <path fill="white" fillOpacity="0.7" stroke="black"
-                                          d="M 125, 125 L 125, 85 A 40, 40 90 0, 1 165, 125"></path>
-                                </>
-                            )}
+                                <polygon fill="black" points="125, 0 130, 10 120, 10" stroke="black"></polygon>
+                                <polygon fill="black" points="250, 125 240, 120 240, 130" stroke="black"></polygon>
 
-                            {lastRChecked < 0 && (
-                                <>
-                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
-                                             points="125,125 125,85 165,125"></polygon>
-                                    <polygon fill="white" fillOpacity="0.7" stroke="black"
-                                             points="125,125 125,205 165,205 165,125"></polygon>
-                                    <path fill="white" fillOpacity="0.7" stroke="black"
-                                          d="M 125,125 L 125,165 A 40,40 90 0,1 85,125"></path>
-                                </>
-                            )}
+                                {lastRChecked > 0 && (
+                                    <>
+                                        <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                                 points="125, 125 125, 165 85, 125"></polygon>
+                                        <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                                 points="125, 125 125, 45 85, 45 85, 125"></polygon>
+                                        <path fill="white" fillOpacity="0.7" stroke="black"
+                                              d="M 125, 125 L 125, 85 A 40, 40 90 0, 1 165, 125"></path>
+                                    </>
+                                )}
 
-                            {parseFloat(lastRChecked) === 0 && (
-                                <></>
-                            )}
+                                {lastRChecked < 0 && (
+                                    <>
+                                        <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                                 points="125,125 125,85 165,125"></polygon>
+                                        <polygon fill="white" fillOpacity="0.7" stroke="black"
+                                                 points="125,125 125,205 165,205 165,125"></polygon>
+                                        <path fill="white" fillOpacity="0.7" stroke="black"
+                                              d="M 125,125 L 125,165 A 40,40 90 0,1 85,125"></path>
+                                    </>
+                                )}
 
-                            <g className="labels x-labels">
-                                <text x="45" y="115"
-                                      className="min_R">{lastRChecked ? -Math.abs(lastRChecked) : "-R"}</text>
-                                <text x="90" y="115"
-                                      className="min_half_R">{lastRChecked ? -Math.abs(lastRChecked) / 2 : "-R/2"}</text>
-                                <text x="165" y="140"
-                                      className="half_R">{lastRChecked ? Math.abs(lastRChecked) / 2 : "R/2"}</text>
-                                <text x="205" y="140" className="R">{lastRChecked ? Math.abs(lastRChecked) : "R"}</text>
-                            </g>
-                            <g className="labels y-labels">
-                                <text x="130" y="205"
-                                      className="min_R">{lastRChecked ? -Math.abs(lastRChecked) : "-R"}</text>
-                                <text x="130" y="165"
-                                      className="min_half_R">{lastRChecked ? -Math.abs(lastRChecked) / 2 : "-R/2"}</text>
-                                <text x="130" y="80"
-                                      className="half_R">{lastRChecked ? Math.abs(lastRChecked) / 2 : "R/2"}</text>
-                                <text x="130" y="40" className="R">{lastRChecked ? Math.abs(lastRChecked) : "R"}</text>
-                            </g>
-                            <g className="pridumaupozhe">
-                                <line stroke="black" x1="122" x2="128" y1="205" y2="205"></line>
-                                <line stroke="black" x1="122" x2="128" y1="165" y2="165"></line>
-                                <line stroke="black" x1="122" x2="128" y1="85" y2="85"></line>
-                                <line stroke="black" x1="122" x2="128" y1="45" y2="45"></line>
+                                {parseFloat(lastRChecked) === 0 && (
+                                    <></>
+                                )}
 
-                                <line stroke="black" y1="122" y2="128" x1="205" x2="205"></line>
-                                <line stroke="black" y1="122" y2="128" x1="165" x2="165"></line>
-                                <line stroke="black" y1="122" y2="128" x1="85" x2="85"></line>
-                                <line stroke="black" y1="122" y2="128" x1="45" x2="45"></line>
-                            </g>
-                        </svg>
+                                <g className="labels x-labels">
+                                    <text x="45" y="115"
+                                          className="min_R">{lastRChecked ? -Math.abs(lastRChecked) : "-R"}</text>
+                                    <text x="90" y="115"
+                                          className="min_half_R">{lastRChecked ? -Math.abs(lastRChecked) / 2 : "-R/2"}</text>
+                                    <text x="165" y="140"
+                                          className="half_R">{lastRChecked ? Math.abs(lastRChecked) / 2 : "R/2"}</text>
+                                    <text x="205" y="140"
+                                          className="R">{lastRChecked ? Math.abs(lastRChecked) : "R"}</text>
+                                </g>
+                                <g className="labels y-labels">
+                                    <text x="130" y="205"
+                                          className="min_R">{lastRChecked ? -Math.abs(lastRChecked) : "-R"}</text>
+                                    <text x="130" y="165"
+                                          className="min_half_R">{lastRChecked ? -Math.abs(lastRChecked) / 2 : "-R/2"}</text>
+                                    <text x="130" y="80"
+                                          className="half_R">{lastRChecked ? Math.abs(lastRChecked) / 2 : "R/2"}</text>
+                                    <text x="130" y="40"
+                                          className="R">{lastRChecked ? Math.abs(lastRChecked) : "R"}</text>
+                                </g>
+                                <g className="pridumaupozhe">
+                                    <line stroke="black" x1="122" x2="128" y1="205" y2="205"></line>
+                                    <line stroke="black" x1="122" x2="128" y1="165" y2="165"></line>
+                                    <line stroke="black" x1="122" x2="128" y1="85" y2="85"></line>
+                                    <line stroke="black" x1="122" x2="128" y1="45" y2="45"></line>
 
+                                    <line stroke="black" y1="122" y2="128" x1="205" x2="205"></line>
+                                    <line stroke="black" y1="122" y2="128" x1="165" x2="165"></line>
+                                    <line stroke="black" y1="122" y2="128" x1="85" x2="85"></line>
+                                    <line stroke="black" y1="122" y2="128" x1="45" x2="45"></line>
+                                </g>
+                            </svg>
+
+                        </div>
+                        <div className={styles.content_right}>
+                            <CreateShot
+                                loadDataWrapper={loadDataWrapper}
+                                setNeedReload={setNeedReload}
+                                setRCheckboxesParentState={setRFormCheckboxes}
+                                lastRCheckedParentState={lastRChecked}
+                                setLastRCheckedParentState={setLastRChecked}
+                            />
+                        </div>
                     </div>
-                    <div className={styles.content_right}>
-                        <CreateShot
-                            loadDataWrapper={loadDataWrapper}
-                            setNeedReload={setNeedReload}
-                            setRCheckboxesParentState={setRFormCheckboxes}
-                            lastRCheckedParentState={lastRChecked}
-                            setLastRCheckedParentState={setLastRChecked}
-                        />
-                    </div>
+
+
                     <div className={styles.content_center}>
                         <ShotTable
                             loadDataWrapper={loadDataWrapper}
