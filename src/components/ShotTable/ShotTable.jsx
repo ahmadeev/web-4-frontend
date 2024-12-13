@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadAll, crudReadMany, crudUpdate} from "../utils/crud.js";
-import {ShotRequestDTO} from "../utils/object.model.js";
-import {useAuth} from "./utils/AuthProvider.jsx";
+import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadAll, crudReadMany, crudUpdate} from "../../utils/crud.js";
+import {ShotRequestDTO} from "../../utils/object.model.js";
+import {useAuth} from "../utils/AuthProvider.jsx";
+import "./ShotTable.module.css"
 
 const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
     const { logout } = useAuth();

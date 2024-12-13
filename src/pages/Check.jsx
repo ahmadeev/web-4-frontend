@@ -10,8 +10,8 @@ import {
     crudDeleteMany,
     crudReadAll
 } from "../utils/crud.js";
-import ShotTable from "../components/ShotTable.jsx";
-import CreateShot from "../components/CreateShot.jsx";
+import ShotTable from "../components/ShotTable/ShotTable.jsx";
+import CreateShot from "../components/CreateShot/CreateShot.jsx";
 import Alert from "../components/Alert/Alert.jsx";
 import {useAuth} from "../components/utils/AuthProvider.jsx";
 import {ShotRequestDTO} from "../utils/object.model.js";
@@ -181,7 +181,7 @@ function Check({ pageTitle }) {
                             <polygon fill="black" points="125, 0 130, 10 120, 10" stroke="black"></polygon>
                             <polygon fill="black" points="250, 125 240, 120 240, 130" stroke="black"></polygon>
 
-                            {lastRChecked >= 0 && (
+                            {lastRChecked > 0 && (
                                 <>
                                     <polygon fill="white" fillOpacity="0.7" stroke="black"
                                              points="125, 125 125, 165 85, 125"></polygon>
@@ -201,6 +201,10 @@ function Check({ pageTitle }) {
                                     <path fill="white" fillOpacity="0.7" stroke="black"
                                           d="M 125,125 L 125,165 A 40,40 90 0,1 85,125"></path>
                                 </>
+                            )}
+
+                            {parseFloat(lastRChecked) === 0 && (
+                                <></>
                             )}
 
                             <g className="labels x-labels">

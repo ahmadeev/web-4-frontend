@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {ShotRequestDTO} from "../utils/object.model.js";
-import {crudCreate, crudDeleteMany} from "../utils/crud.js";
-import {drawDot} from "../utils/graph.js";
+import {ShotRequestDTO} from "../../utils/object.model.js";
+import {crudCreate, crudDeleteMany} from "../../utils/crud.js";
+import {drawDot} from "../../utils/graph.js";
+import styles from "./CreateShot.module.css";
 
 function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, lastRCheckedParentState, setLastRCheckedParentState }) {
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
@@ -88,15 +89,24 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
     }
 
     return (
-        <div>
-            <form>
-                {/*<h2>ФОРМА ДЛЯ ТОЧКИ</h2>*/}
-                <div className="form-section">
-                    <div className="form-group">
-                        <label>x:</label><br/>
+        <form style={{
+            textAlign: "left",
+            width: "60%",
+            paddingLeft: "30px",
+            paddingRight: "30px",
+            boxSizing: "border-box"
+        }}>
+            {/*<h2>ФОРМА ДЛЯ ТОЧКИ</h2>*/}
+            <div className="form-section">
+                <div className={styles.form_group}>
+                    <label>CHOOSE X:</label><br/>
+                    <div className={styles.form_checkbox_input_group}>
                         {values && values.map((value, index) => (
                             <>
-                                <label key={index}>
+                                <label
+                                    className={styles.form_checkbox_input_label}
+                                    key={index}
+                                >
                                     <input
                                         type="checkbox"
                                         name={value}
@@ -107,24 +117,33 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                                     />
                                     {value}
                                 </label>
-                                {(index + 1) % 3 === 0 && <br/>}
                             </>
                         ))}
+                    </div>
+                </div>
 
-                        <label>y:</label>
-                        <input
-                            value={y}
-                            onChange={(e) => {
-                                handleYChange(e)
-                            }}
-                            type="text"
-                            placeholder="from -5 to 3"
-                        /><br/>
+                <div className={styles.form_group}>
+                    <label>CHOOSE Y:</label><br/>
+                    <input
+                        value={y}
+                        className={styles.form_text_input}
+                        onChange={(e) => {
+                            handleYChange(e)
+                        }}
+                        type="text"
+                        placeholder="from -5 to 3"
+                    /><br/>
+                </div>
 
-                        <label>r:</label><br/>
+                <div className={styles.form_group}>
+                    <label>CHOOSE R:</label><br/>
+                    <div className={styles.form_checkbox_input_group}>
                         {values && values.map((value, index) => (
                             <>
-                                <label key={index}>
+                                <label
+                                    key={index}
+                                    className={styles.form_checkbox_input_label}
+                                >
                                     <input
                                         type="checkbox"
                                         name={value}
@@ -149,12 +168,13 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                                     />
                                     {value}
                                 </label>
-                                {(index + 1) % 3 === 0 && <br/>}
                             </>
                         ))}
                     </div>
                 </div>
+            </div>
 
+            <div className={styles.form_button_block}>
                 <button disabled={(!submitButtonState)} onClick={() => {
                     event.preventDefault();
                     handleRequest();
@@ -168,8 +188,9 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                         });
                 }}>RESET
                 </button>
-            </form>
-        </div>
+            </div>
+
+        </form>
     )
 }
 

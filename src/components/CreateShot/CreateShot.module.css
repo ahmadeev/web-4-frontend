@@ -1,0 +1,51 @@
+.form_checkbox_input_group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 3 колонки одинаковой ширины */
+    gap: 10px                               /* Отступы между элементами */
+}
+
+.form_text_input {
+    height: 2rem;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.form_group {
+    margin-bottom: 1rem
+}
+
+.form_checkbox_input_label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+.form_button_block {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.form_button_block button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    /*transition: transform 0.2s, box-shadow 0.2s;*/
+}
+
+.form_button_block button:hover {
+    /*transform: translateY(-2px);*/
+    color: black;
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+}
