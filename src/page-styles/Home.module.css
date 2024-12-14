@@ -16,10 +16,20 @@
     margin-top: 10vh;           /* для фиксированного navbar */
 }
 
+.text_wrapper {
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 p.article {
     margin-left: 20px;
     margin-right: 20px;
-    text-align: left;
+}
+
+ul {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 @media (min-width: 1243px) {
