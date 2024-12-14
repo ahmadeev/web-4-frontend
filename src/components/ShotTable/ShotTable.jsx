@@ -3,14 +3,12 @@ import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadAll, crudReadM
 import {ShotRequestDTO} from "../../utils/object.model.js";
 import {useAuth} from "../utils/AuthProvider.jsx";
 import "./ShotTable.module.css"
-import styles from "../../page-styles/Check.module.css";
 
-const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState }) => {
+const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState, pageParentState, setPageParentState }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);
 
-    const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -18,13 +16,13 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
     const [maxPageIncreaseButtonState, setMaxPageIncrease] = useState(true);
 
     const handlePageChange = (direction) => {
-        setPage((prevPage) => prevPage + direction);
+        setPageParentState((prevPage) => prevPage + direction);
     };
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                const response = await crudReadMany(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
+                const response = await crudReadMany(readManyUrl, pageParentState, size); // асинхронно грузим страницу данных из БД
 
                 if (!response.ok) {
                     if (response.status === 401)  {
@@ -45,7 +43,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
 
         loadData();
 
-    }, [isNeedReload, readManyUrl, page, size]); // пустой -- один раз. data не добавляем, иначе луп
+    }, [isNeedReload, readManyUrl, pageParentState, size]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -125,14 +123,14 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
 
             <div style={DIV_STYLE}>
                 <button id="decrease-page-min" onClick={() => {
-                    setPage(0);
+                    setPageParentState(0);
                     setMaxPageIncrease(true);
-                }} disabled={page === 0}>&lt;&lt;</button>
+                }} disabled={pageParentState === 0}>&lt;&lt;</button>
                 <button id="decrease-page" onClick={() => {
                     handlePageChange(-1);
                     setMaxPageIncrease(true);
-                }} disabled={page === 0}>&lt;</button>
-                <p>{page + 1}</p>
+                }} disabled={pageParentState === 0}>&lt;</button>
+                <p>{pageParentState + 1}</p>
                 <button id="increase-page" onClick={() => {
                     handlePageChange(1);
                     setMaxPageIncrease(true);
@@ -163,7 +161,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
                                 console.error("Error reading response body", error);
                             }
                             count = await responseData.data;
-                            handlePageChange(Math.ceil((count - (page + 1) * size) / size));
+                            handlePageChange(Math.ceil((count - (pageParentState + 1) * size) / size));
                             setMaxPageIncrease(false)
                             return responseData;
                         } catch (error) {
@@ -176,16 +174,6 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
 
                 }} disabled={data.length < 10 || !maxPageIncreaseButtonState}>&gt;&gt;</button>
             </div>
-
-            <button onClick={() => {
-                loadDataWrapper(crudCreate, [`${BASE_URL}/shot`, shot])
-                    .then((responseData) => {
-                        setNeedReload((prev) => (!prev));
-                        return responseData;
-                    });
-            }}>CREATE
-            </button>
-
         </>
     );
 };

@@ -4,7 +4,7 @@ import {crudCreate, crudDeleteMany} from "../../utils/crud.js";
 import {drawDot} from "../../utils/graph.js";
 import styles from "./CreateShot.module.css";
 
-function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, lastRCheckedParentState, setLastRCheckedParentState }) {
+function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState, lastRCheckedParentState, setLastRCheckedParentState, setPageParentState }) {
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
     const values = [
         "-2.0", "-1.5", "-1.0",
@@ -83,6 +83,7 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
             .then((res) => {
                 console.log(res);
                 for(let index = 0; index < res.data.length; index++) {
+                    console.log("одиночка",res.data[index].r, lastRCheckedParentState)
                     drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRCheckedParentState)
                 }
             });
@@ -180,11 +181,29 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                     handleRequest();
                 }}>CREATE
                 </button>
-                <button onClick={() => {
+                <button onClick={(e) => {
+                    e.preventDefault();
                     loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`])
                         .then((responseData) => {
                             setNeedReload((prev) => (!prev));
+                            setPageParentState(0);
+
+                            document.querySelectorAll('circle').forEach(el => {el.remove()})
+
+                            Object.keys(xCheckboxes).forEach(key => {
+                                xCheckboxes[key] = false;
+                            });
+
+                            setY("");
+
+                            Object.keys(rCheckboxes).forEach(key => {
+                                rCheckboxes[key] = false;
+                            });
+
                             return responseData;
+                        })
+                        .catch((error) => {
+                            console.error("Error sending DELETE request:", error);
                         });
                 }}>RESET
                 </button>

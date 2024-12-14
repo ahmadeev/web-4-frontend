@@ -62,6 +62,7 @@ export function crudReadMany(url, page = 0, size = 10) {
 }
 
 export function crudDeleteMany(url) {
+    console.log("Sending DELETE request to:", url);
     return fetch(`${url}`, {
         method: 'DELETE',
         headers: {

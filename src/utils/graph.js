@@ -4,6 +4,7 @@ export const drawDots = (r, shots) => {
         return;
     }
     r = parseFloat(r);
+    console.log("actual r:", r)
 
     let dotsToDraw = [];
     for (let shot of shots) {
@@ -22,7 +23,7 @@ export const drawDot = (x, y, r, isHit, lastR) => {
     if (!r || parseFloat(r) === 0 || !lastR || parseFloat(lastR) === 0) {
         return;
     }
-
+    lastR = parseFloat(lastR);
     const svg = document.querySelector('svg')
     const CENTER_CONST = svg.getBoundingClientRect().height / 2;
     const R_CONST = 80
@@ -37,9 +38,13 @@ export const drawDot = (x, y, r, isHit, lastR) => {
     dot.setAttributeNS(null, 'r', '3');
 
     let dotColor;
-    if (r === parseFloat(lastR)) {
+    /* TODO: костыль для правильного окрашивания */
+
+    if (r === (lastR < 0 ? -lastR : lastR)) {
+        console.log("принято: r:", r, "lastR:", lastR)
         dotColor = (isHit ? 'fill: green; stroke: black;' : 'fill: red; stroke: black;')
     } else {
+        console.log("отмена: r:", r, "lastR:", lastR)
         dotColor = 'fill: white; stroke: black;'
     }
 

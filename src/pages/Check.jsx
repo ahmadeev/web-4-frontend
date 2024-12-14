@@ -27,6 +27,8 @@ function Check({ pageTitle }) {
     const [rFormCheckboxes, setRFormCheckboxes] = useState({});
     const [lastRChecked, setLastRChecked] = useState("");
 
+    const [page, setPage] = useState(0);
+
     const R_TO_PIXEL = 80;
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -116,6 +118,7 @@ function Check({ pageTitle }) {
             })
             .then((res) => {
                 for(let index = 0; index < res.data.length; index++) {
+                    console.log("одиночка",res.data[index].r, lastRChecked)
                     drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRChecked)
                 }
             });
@@ -249,7 +252,9 @@ function Check({ pageTitle }) {
                                 setRCheckboxesParentState={setRFormCheckboxes}
                                 lastRCheckedParentState={lastRChecked}
                                 setLastRCheckedParentState={setLastRChecked}
+                                setPageParentState={setPage}
                             />
+                            {/* TODO: надо сделать модульнее */}
                         </div>
                     </div>
 
@@ -263,6 +268,8 @@ function Check({ pageTitle }) {
                                 readManyUrl={`${BASE_URL}/shots`}
                                 deleteOneUrl={`${BASE_URL}/shot`}
                                 lastRCheckedParentState={lastRChecked}
+                                pageParentState={page}
+                                setPageParentState={setPage}
                             />
                         </div>
                     </div>
