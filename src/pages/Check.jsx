@@ -27,7 +27,7 @@ function Check({ pageTitle }) {
     const [rFormCheckboxes, setRFormCheckboxes] = useState({});
     const [lastRChecked, setLastRChecked] = useState("");
 
-    const [page, setPage] = useState(0);
+    const [pageDrop, setPageDrop] = useState(false);
 
     const R_TO_PIXEL = 80;
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
@@ -78,6 +78,7 @@ function Check({ pageTitle }) {
         return result;
     }
 
+    // TODO: на svg клики не понимает, как красить точки на отрицательных радиусах
     const handleSvgClick = (e) => {
         const checkboxes = handleCheckboxRequest(rFormCheckboxes);
         if (!(checkboxes.length > 0)) {
@@ -117,9 +118,18 @@ function Check({ pageTitle }) {
                 return responseData;
             })
             .then((res) => {
+                let dotsToDraw = [];
+
                 for(let index = 0; index < res.data.length; index++) {
-                    console.log("одиночка",res.data[index].r, lastRChecked)
-                    drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRChecked)
+                    if (res.data[index].r === parseFloat(lastRChecked)) {
+                        dotsToDraw.push(res.data[index]);
+                    } else {
+                        drawDot(res.data[index].x, res.data[index].y, res.data[index].r, res.data[index].hit, lastRChecked);
+                    }
+                }
+
+                for(let dot of dotsToDraw) {
+                    drawDot(dot.x, dot.y, dot.r, dot.hit, lastRChecked);
                 }
             });
     }
@@ -252,7 +262,7 @@ function Check({ pageTitle }) {
                                 setRCheckboxesParentState={setRFormCheckboxes}
                                 lastRCheckedParentState={lastRChecked}
                                 setLastRCheckedParentState={setLastRChecked}
-                                setPageParentState={setPage}
+                                setPageParentState={setPageDrop}
                             />
                             {/* TODO: надо сделать модульнее */}
                         </div>
@@ -268,8 +278,7 @@ function Check({ pageTitle }) {
                                 readManyUrl={`${BASE_URL}/shots`}
                                 deleteOneUrl={`${BASE_URL}/shot`}
                                 lastRCheckedParentState={lastRChecked}
-                                pageParentState={page}
-                                setPageParentState={setPage}
+                                pageParentState={pageDrop}
                             />
                         </div>
                     </div>

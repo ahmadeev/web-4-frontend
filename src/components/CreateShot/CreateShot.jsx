@@ -186,7 +186,8 @@ function CreateShot({ loadDataWrapper, setNeedReload, setRCheckboxesParentState,
                     loadDataWrapper(crudDeleteMany, [`${BASE_URL}/shots`])
                         .then((responseData) => {
                             setNeedReload((prev) => (!prev));
-                            setPageParentState(0);
+                            setPageParentState((prev) => (!prev));
+                            setLastRCheckedParentState("");
 
                             document.querySelectorAll('circle').forEach(el => {el.remove()})
 

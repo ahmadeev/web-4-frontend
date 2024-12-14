@@ -40,11 +40,9 @@ export const drawDot = (x, y, r, isHit, lastR) => {
     let dotColor;
     /* TODO: костыль для правильного окрашивания */
 
-    if (r === (lastR < 0 ? -lastR : lastR)) {
-        console.log("принято: r:", r, "lastR:", lastR)
+    if (r === lastR) {
         dotColor = (isHit ? 'fill: green; stroke: black;' : 'fill: red; stroke: black;')
     } else {
-        console.log("отмена: r:", r, "lastR:", lastR)
         dotColor = 'fill: white; stroke: black;'
     }
 

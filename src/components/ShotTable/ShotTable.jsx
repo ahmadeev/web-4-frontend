@@ -4,11 +4,12 @@ import {ShotRequestDTO} from "../../utils/object.model.js";
 import {useAuth} from "../utils/AuthProvider.jsx";
 import "./ShotTable.module.css"
 
-const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState, pageParentState, setPageParentState }) => {
+const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState, pageParentState }) => {
     const { logout } = useAuth();
 
     const [data, setData] = useState([]);
 
+    const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -16,13 +17,17 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
     const [maxPageIncreaseButtonState, setMaxPageIncrease] = useState(true);
 
     const handlePageChange = (direction) => {
-        setPageParentState((prevPage) => prevPage + direction);
+        setPage((prevPage) => prevPage + direction);
     };
+
+    useEffect(() => {
+        setPage(0);
+    }, [pageParentState]);
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                const response = await crudReadMany(readManyUrl, pageParentState, size); // асинхронно грузим страницу данных из БД
+                const response = await crudReadMany(readManyUrl, page, size); // асинхронно грузим страницу данных из БД
 
                 if (!response.ok) {
                     if (response.status === 401)  {
@@ -43,7 +48,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
 
         loadData();
 
-    }, [isNeedReload, readManyUrl, pageParentState, size]); // пустой -- один раз. data не добавляем, иначе луп
+    }, [isNeedReload, readManyUrl, page, size]); // пустой -- один раз. data не добавляем, иначе луп
 
     const BASE_URL = "http://localhost:8080/backend-jakarta-ee-1.0-SNAPSHOT/api/user";
 
@@ -123,14 +128,14 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
 
             <div style={DIV_STYLE}>
                 <button id="decrease-page-min" onClick={() => {
-                    setPageParentState(0);
+                    setPage(0);
                     setMaxPageIncrease(true);
-                }} disabled={pageParentState === 0}>&lt;&lt;</button>
+                }} disabled={page === 0}>&lt;&lt;</button>
                 <button id="decrease-page" onClick={() => {
                     handlePageChange(-1);
                     setMaxPageIncrease(true);
-                }} disabled={pageParentState === 0}>&lt;</button>
-                <p>{pageParentState + 1}</p>
+                }} disabled={page === 0}>&lt;</button>
+                <p>{page + 1}</p>
                 <button id="increase-page" onClick={() => {
                     handlePageChange(1);
                     setMaxPageIncrease(true);
@@ -161,7 +166,7 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
                                 console.error("Error reading response body", error);
                             }
                             count = await responseData.data;
-                            handlePageChange(Math.ceil((count - (pageParentState + 1) * size) / size));
+                            handlePageChange(Math.ceil((count - (page + 1) * size) / size));
                             setMaxPageIncrease(false)
                             return responseData;
                         } catch (error) {
