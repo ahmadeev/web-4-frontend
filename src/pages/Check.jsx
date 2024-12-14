@@ -133,7 +133,6 @@ function Check({ pageTitle }) {
     }, [rFormCheckboxes])
 
     useEffect(() => {
-        console.log(lastRChecked);
         if (lastRChecked === "") {
             return () => {
                 document.querySelectorAll('circle').forEach(el => {el.remove()});
