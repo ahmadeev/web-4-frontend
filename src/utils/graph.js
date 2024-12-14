@@ -3,9 +3,18 @@ export const drawDots = (r, shots) => {
     if (!r || parseFloat(r) === 0) {
         return;
     }
+    r = parseFloat(r);
 
+    let dotsToDraw = [];
     for (let shot of shots) {
-        drawDot(shot.x, shot.y, shot.r, shot.hit, r)
+        if (r === shot.r) {
+            dotsToDraw.push(shot);
+        } else {
+            drawDot(shot.x, shot.y, shot.r, shot.hit, r)
+        }
+    }
+    for (let dot of dotsToDraw) {
+        drawDot(dot.x, dot.y, dot.r, dot.hit, r)
     }
 }
 
