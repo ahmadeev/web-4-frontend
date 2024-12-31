@@ -3,6 +3,7 @@ import {crudCreate, crudDelete, crudDeleteMany, crudRead, crudReadAll, crudReadM
 import {ShotRequestDTO} from "../../utils/object.model.js";
 import {useAuth} from "../utils/AuthProvider.jsx";
 import "./ShotTable.module.css"
+import styles from "./ShotTable.module.css"
 
 const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, deleteOneUrl, lastRCheckedParentState, pageParentState }) => {
     const { logout } = useAuth();
@@ -127,20 +128,20 @@ const ShotTable = ({ loadDataWrapper, isNeedReload, setNeedReload, readManyUrl, 
 
 
             <div style={DIV_STYLE}>
-                <button id="decrease-page-min" onClick={() => {
+                <button id="decrease-page-min" className={styles.turn_page} onClick={() => {
                     setPage(0);
                     setMaxPageIncrease(true);
                 }} disabled={page === 0}>&lt;&lt;</button>
-                <button id="decrease-page" onClick={() => {
+                <button id="decrease-page" className={styles.turn_page} onClick={() => {
                     handlePageChange(-1);
                     setMaxPageIncrease(true);
                 }} disabled={page === 0}>&lt;</button>
                 <p>{page + 1}</p>
-                <button id="increase-page" onClick={() => {
+                <button id="increase-page" className={styles.turn_page} onClick={() => {
                     handlePageChange(1);
                     setMaxPageIncrease(true);
                 }} disabled={data.length < 10 || !maxPageIncreaseButtonState}>&gt;</button>
-                <button id="increase-page-max" onClick={() => {
+                <button id="increase-page-max" className={styles.turn_page} onClick={() => {
                     let count;
                     const loadCount = async () => {
                         try {

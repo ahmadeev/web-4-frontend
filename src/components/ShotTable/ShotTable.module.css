@@ -10,6 +10,19 @@ th, td {
     text-align: center;
 }
 
+button.turn_page {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button.turn_page:disabled {
+    cursor: initial;
+}
+
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }

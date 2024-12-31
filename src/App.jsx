@@ -18,16 +18,11 @@ function App() {
                   <Routes>
                       <Route path="/" element={<Home pageTitle="Домашняя" />} />
                       <Route path="/auth" element={<Auth pageTitle="Войти" isSignedUp={true} />} />
-
                       <Route path="/check" element={
-                          <Check pageTitle="Проверка" />
-                      } />
-
-{/*                      <Route path="/check" element={
                           <ProtectedRoute isAuthenticated={isAuthenticated} requiredRoles={["USER"]}>
                               <Check pageTitle="Проверка" />
                           </ProtectedRoute>
-                      } />*/}
+                      } />
                   </Routes>
               </HashRouter>
           </AuthProvider>
